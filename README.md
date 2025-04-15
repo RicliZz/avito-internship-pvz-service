@@ -1,0 +1,1 @@
+# avito-internship-pvz-service
