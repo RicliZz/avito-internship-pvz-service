@@ -6,5 +6,9 @@ import (
 
 type AuthenticationRepository interface {
 	Register(payload models.RegisterParams) error
-	GetUserByEmail(email string) (string, string, error)
+	GetUserByEmail(email string) (error, string, string)
+}
+
+type PVZRepository interface {
+	CreatePVZ(pvz models.CreatePVZRequest) (error, *models.PVZ)
 }

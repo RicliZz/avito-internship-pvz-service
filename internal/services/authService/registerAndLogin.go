@@ -23,20 +23,20 @@ func NewAuthLogin(authDB repositories.AuthenticationRepository) *AuthLogin {
 func (s *AuthLogin) Login(c *gin.Context) {
 	log.Println("Сервис Login")
 
-	params := &models.LoginParams{}
-	if err := c.ShouldBind(params); err != nil {
+	user := &models.LoginParams{}
+	if err := c.ShouldBind(user); err != nil {
 		log.Println("Не прошла валидация")
 		c.JSON(400, gin.H{"description": "Неверный запрос"})
 		return
 	}
 
-	password, role, err := s.authDB.GetUserByEmail(params.Email)
+	err, password, role := s.authDB.GetUserByEmail(user.Email)
 	if err != nil {
 		log.Println("Ошибка при получении пароля для сравнения из БД")
 		c.JSON(400, gin.H{"description": "Неверный запрос"})
 		return
 	}
-	compare := pass.ComparePassWithHash(params.Password, password)
+	compare := pass.ComparePassWithHash(user.Password, password)
 	if !compare {
 		log.Println("Пароли не одинаковы")
 		c.JSON(401, gin.H{"description": "Неверные учётные данные"})
@@ -55,18 +55,18 @@ func (s *AuthLogin) Login(c *gin.Context) {
 
 func (s *AuthLogin) Register(c *gin.Context) {
 	log.Println("Сервис регистрации")
-	params := &models.RegisterParams{}
-	if err := c.ShouldBindJSON(params); err != nil {
+	var user models.RegisterParams
+	if err := c.ShouldBindJSON(&user); err != nil {
 		log.Println("Не прошла валидация")
 		c.JSON(400, gin.H{"description": "Неверный запрос"})
 		return
 	}
 
-	//hash password and change password on hash in model
-	params.Password = pass.CreateHash(params.Password)
+	//Хэшируем пароль и заменяем изначальный на его хэш в модели
+	user.Password = pass.CreateHash(user.Password)
 
-	//create new user in db
-	err := s.authDB.Register(*params)
+	//Создание пользователя
+	err := s.authDB.Register(user)
 	if err != nil {
 		log.Println("Register repository fail")
 		c.JSON(400, gin.H{"description": "Неверный запрос"})

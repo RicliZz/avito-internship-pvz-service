@@ -4,9 +4,12 @@ import (
 	"context"
 	"fmt"
 	authentication "github.com/RicliZz/avito-internship-pvz-service/internal/api/auth"
+	"github.com/RicliZz/avito-internship-pvz-service/internal/api/pvz"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories/authRepo"
+	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories/pvzRepo"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/server"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/authService"
+	"github.com/RicliZz/avito-internship-pvz-service/internal/services/pvzService"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
@@ -37,16 +40,20 @@ func Run() {
 
 	//Initialize repositories
 	authRepository := authRepo.NewAuthRepository(conn)
+	PVZRepository := pvzRepo.NewPVZRepository(conn)
 
 	//Initialize services
-	commonLoginService := authService.NewAuthLogin(authRepository)
+	loginService := authService.NewAuthLogin(authRepository)
+	PVZService := pvzService.NewPVZService(PVZRepository)
 
 	//New Handlers
 	api := r.Group("")
-	authHandlers := authentication.NewAuthHandler(commonLoginService)
+	authHandlers := authentication.NewAuthHandler(loginService)
+	PVZHandlers := pvz.NewPVZHandler(PVZService)
 
 	//Init Handlers
 	authHandlers.InitAuthHandlers(api)
+	PVZHandlers.InitPVZHandlers(api)
 
 	// Initialize and configure the HTTP server
 	srv := server.NewAPIServer(r)

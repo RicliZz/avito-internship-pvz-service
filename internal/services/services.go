@@ -7,3 +7,7 @@ type AuthenticationService interface {
 	Login(ctx *gin.Context)
 	Register(ctx *gin.Context)
 }
+
+type PVZService interface {
+	CreateNewPVZ(ctx *gin.Context)
+}

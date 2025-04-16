@@ -45,6 +45,5 @@ func (s *APIServer) Shutdown(ctx context.Context) error {
 		log.Println("Shutdown ended with:", ctx.Err())
 	}
 
-	log.Println("Shutdown complete")
 	return nil
 }
