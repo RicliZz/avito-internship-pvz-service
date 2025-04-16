@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func CreateDummyJWT(role string) (string, error) {
+func CreateJWT(role string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
 		"role": role,
 		"exp":  time.Now().Add(time.Minute * 15).Unix(),

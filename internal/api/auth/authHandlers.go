@@ -18,5 +18,7 @@ func NewAuthHandler(AuthService services.AuthenticationService) AuthHandler {
 func (h *AuthHandler) InitAuthHandlers(router *gin.RouterGroup) {
 	{
 		router.POST("/dummyLogin", h.AuthService.DummyLogin)
+		router.POST("/register", h.AuthService.Register)
+		router.POST("/login", h.AuthService.Login)
 	}
 }

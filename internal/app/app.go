@@ -2,10 +2,13 @@ package app
 
 import (
 	"context"
+	"fmt"
 	authentication "github.com/RicliZz/avito-internship-pvz-service/internal/api/auth"
+	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories/authRepo"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/server"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/authService"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
@@ -20,15 +23,27 @@ func Run() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+	//connect to PostgreSQL
+	conn, err := pgx.Connect(context.Background(), os.Getenv("POSTGRESQL_URL"))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+	defer conn.Close(context.Background())
+
 	//Engine GIN
 	r := gin.Default()
 
+	//Initialize repositories
+	authRepository := authRepo.NewAuthRepository(conn)
+
 	//Initialize services
-	dummyLoginService := authService.NewDummyLogin()
+	commonLoginService := authService.NewAuthLogin(authRepository)
 
 	//New Handlers
 	api := r.Group("")
-	authHandlers := authentication.NewAuthHandler(dummyLoginService)
+	authHandlers := authentication.NewAuthHandler(commonLoginService)
 
 	//Init Handlers
 	authHandlers.InitAuthHandlers(api)
