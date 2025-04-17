@@ -15,3 +15,8 @@ type PVZService interface {
 type ReceptionService interface {
 	CreateReception(ctx *gin.Context)
 }
+
+type ProductService interface {
+	AddProductInReception(ctx *gin.Context)
+	FindLastActiveReception(ctx *gin.Context)
+}

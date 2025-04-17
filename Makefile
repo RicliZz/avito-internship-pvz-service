@@ -13,4 +13,4 @@ migrate-up:
 	@migrate -database ${POSTGRESQL_URL} -path db/migrations up
 
 migrate-down:
-	@migrate -database ${POSTGRESQL_URL} -path db/migrations down 1
+	@migrate -database ${POSTGRESQL_URL} -path db/migrations down ${count}

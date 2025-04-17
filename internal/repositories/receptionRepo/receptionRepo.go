@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"log"
 )
@@ -51,4 +52,19 @@ func (r *ReceptionRepository) CreateReception(payload models.CreateReceptionRequ
 		return err, nil
 	}
 	return nil, &newReception
+}
+
+func (r *ReceptionRepository) FindLastActiveReception(PVZId uuid.UUID) (error, uuid.UUID) {
+	var receptionID uuid.UUID
+	sqlQuery := `SELECT "ID" FROM reception
+				 WHERE "pvzID" = $1 AND status = 'in_progress' 
+				 ORDER BY "dateTime" DESC LIMIT 1;`
+	err := r.db.QueryRow(context.Background(), sqlQuery, PVZId).Scan(&receptionID)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return errors.New("Нет открытых приёмок, добавлять товар некуда"), uuid.Nil
+		}
+		return err, uuid.Nil
+	}
+	return nil, receptionID
 }

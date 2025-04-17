@@ -4,13 +4,16 @@ import (
 	"context"
 	"fmt"
 	authentication "github.com/RicliZz/avito-internship-pvz-service/internal/api/auth"
+	"github.com/RicliZz/avito-internship-pvz-service/internal/api/products"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/api/pvz"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/api/reception"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories/authRepo"
+	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories/productRepo"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories/pvzRepo"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories/receptionRepo"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/server"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/authService"
+	"github.com/RicliZz/avito-internship-pvz-service/internal/services/productService"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/pvzService"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/receptionService"
 	"github.com/gin-gonic/gin"
@@ -45,17 +48,20 @@ func Run() {
 	authRepository := authRepo.NewAuthRepository(conn)
 	PVZRepository := pvzRepo.NewPVZRepository(conn)
 	receptionRepository := receptionRepo.NewReceptionRepository(conn)
+	productRepository := productRepo.NewProductRepository(conn)
 
 	//Initialize services
 	loginService := authService.NewAuthLogin(authRepository)
 	PVZService := pvzService.NewPVZService(PVZRepository)
 	ReceptionService := receptionService.NewReceptionService(receptionRepository)
+	ProductService := productService.NewProductService(receptionRepository, productRepository)
 
 	//New Handlers
 	api := r.Group("")
 	authHandlers := authentication.NewAuthHandler(loginService)
 	PVZHandlers := pvz.NewPVZHandler(PVZService)
 	receptionHandlers := reception.NewReceptionHandlers(ReceptionService)
+	productHandlers := products.NewProductsHandlers(ProductService)
 
 	//Init Handlers
 	authHandlers.InitAuthHandlers(api)

@@ -8,10 +8,10 @@ import (
 )
 
 type PVZService struct {
-	PVZRepo repositories.PVZRepository
+	PVZRepo repositories.PVZRepo
 }
 
-func NewPVZService(PVZRepo repositories.PVZRepository) *PVZService {
+func NewPVZService(PVZRepo repositories.PVZRepo) *PVZService {
 	return &PVZService{
 		PVZRepo: PVZRepo,
 	}

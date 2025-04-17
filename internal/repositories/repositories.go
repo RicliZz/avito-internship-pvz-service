@@ -2,17 +2,23 @@ package repositories
 
 import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
+	"github.com/google/uuid"
 )
 
-type AuthenticationRepository interface {
+type AuthenticationRepo interface {
 	Register(payload models.RegisterParams) error
 	GetUserByEmail(email string) (error, string, string)
 }
 
-type PVZRepository interface {
+type PVZRepo interface {
 	CreatePVZ(pvz models.CreatePVZRequest) (error, *models.PVZ)
 }
 
-type ReceptionRepository interface {
+type ReceptionRepo interface {
 	CreateReception(reception models.CreateReceptionRequest) (error, *models.Reception)
+	FindLastActiveReception(PVZId uuid.UUID) (error, uuid.UUID)
+}
+
+type ProductRepo interface {
+	AddProductInActiveReception(receptionID uuid.UUID, productType string) (error, *models.Product)
 }

@@ -11,10 +11,10 @@ import (
 
 type AuthLogin struct {
 	DummyLoginService
-	authDB repositories.AuthenticationRepository
+	authDB repositories.AuthenticationRepo
 }
 
-func NewAuthLogin(authDB repositories.AuthenticationRepository) *AuthLogin {
+func NewAuthLogin(authDB repositories.AuthenticationRepo) *AuthLogin {
 	return &AuthLogin{
 		authDB: authDB,
 	}
@@ -68,7 +68,7 @@ func (s *AuthLogin) Register(c *gin.Context) {
 	//Создание пользователя
 	err := s.authDB.Register(user)
 	if err != nil {
-		log.Println("Register repository fail")
+		log.Println("Ошибка при создании пользователя в БД")
 		c.JSON(400, gin.H{"description": "Неверный запрос"})
 		return
 	}
