@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS reception;
+
+DROP TYPE IF EXISTS status;
+

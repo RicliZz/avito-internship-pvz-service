@@ -12,3 +12,7 @@ type AuthenticationRepository interface {
 type PVZRepository interface {
 	CreatePVZ(pvz models.CreatePVZRequest) (error, *models.PVZ)
 }
+
+type ReceptionRepository interface {
+	CreateReception(reception models.CreateReceptionRequest) (error, *models.Reception)
+}

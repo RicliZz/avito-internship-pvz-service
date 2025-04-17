@@ -9,5 +9,9 @@ type AuthenticationService interface {
 }
 
 type PVZService interface {
-	CreateNewPVZ(ctx *gin.Context)
+	CreatePVZ(ctx *gin.Context)
+}
+
+type ReceptionService interface {
+	CreateReception(ctx *gin.Context)
 }

@@ -17,7 +17,7 @@ func NewPVZService(PVZRepo repositories.PVZRepository) *PVZService {
 	}
 }
 
-func (s *PVZService) CreateNewPVZ(c *gin.Context) {
+func (s *PVZService) CreatePVZ(c *gin.Context) {
 	log.Println("Началось создание нового ПВЗ")
 	var PVZ models.CreatePVZRequest
 	if err := c.ShouldBindJSON(&PVZ); err != nil {
@@ -31,5 +31,5 @@ func (s *PVZService) CreateNewPVZ(c *gin.Context) {
 		c.JSON(400, gin.H{"description": err})
 		return
 	}
-	c.JSON(201, newPVZ)
+	c.JSON(201, gin.H{"ПВЗ создан": newPVZ})
 }

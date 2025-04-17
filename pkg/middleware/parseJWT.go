@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"net/http"
@@ -34,7 +35,9 @@ func CheckRoleMiddleware(secret string, expectedRole string) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid claims"})
 			return
 		}
-
+		fmt.Println(claims["role"])
+		fmt.Println(expectedRole)
+		fmt.Println(expectedRole == claims["role"])
 		role, ok := claims["role"].(string)
 		if !ok || role != expectedRole {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "insufficient permissions"})
