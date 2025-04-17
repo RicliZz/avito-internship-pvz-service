@@ -22,7 +22,7 @@ func (r *PVZRepository) CreatePVZ(payload models.CreatePVZRequest) (error, *mode
 	var newPVZ models.PVZ
 	err := r.db.QueryRow(context.Background(), `
 		INSERT INTO "PVZ" (city) VALUES ($1)
-		RETURNING id, registration_date, city`,
+		RETURNING "ID", "registrationDate", city`,
 		payload.City).Scan(&newPVZ.ID, &newPVZ.RegistrationDate, &newPVZ.City)
 	if err != nil {
 		log.Println("Ошибка SQL запроса на создание нового ПВЗ")

@@ -29,11 +29,11 @@ func (r *ReceptionRepository) CreateReception(payload models.CreateReceptionRequ
 	defer tx.Rollback(context.Background())
 	sqlQuery := `
 				WITH in_progress_reception AS (
-    			SELECT id FROM reception
-    			WHERE pvzid = $1 AND status = 'in_progress'
+    			SELECT "ID" FROM reception
+    			WHERE "pvzID" = $1 AND status = 'in_progress'
         		FOR UPDATE
 				)
-				INSERT INTO reception (pvzid)
+				INSERT INTO reception ("pvzID")
 				SELECT $1
 				WHERE NOT EXISTS(SELECT 1 FROM in_progress_reception)
 				RETURNING *;

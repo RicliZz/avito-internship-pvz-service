@@ -21,7 +21,7 @@ func (r *ProductRepository) AddProductInActiveReception(receptionID uuid.UUID, p
 	var newProduct models.Product
 	sqlQuery := `INSERT INTO products (type, "receptionID") VALUES ($1, $2) RETURNING "ID", "dateTime", type, "receptionID"`
 	err := r.db.QueryRow(context.Background(), sqlQuery,
-		receptionID, productType).Scan(&newProduct.ID, &newProduct.DateTime, &newProduct.ProductType, &newProduct.ReceptionId)
+		productType, receptionID).Scan(&newProduct.ID, &newProduct.DateTime, &newProduct.ProductType, &newProduct.ReceptionId)
 	if err != nil {
 		return err, nil
 	}

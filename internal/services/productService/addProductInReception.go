@@ -22,7 +22,7 @@ func NewProductService(ReceptionRepository repositories.ReceptionRepo, ProductRe
 func (s *ProductService) AddProductInReception(c *gin.Context) {
 	log.Println("Запуск сервиса для добавления продукта в приёмку")
 	var product models.AddProductRequest
-	if err := c.ShouldBindJSON(product); err != nil {
+	if err := c.ShouldBindJSON(&product); err != nil {
 		log.Println("Ошибка при парсинге")
 		c.JSON(400, gin.H{"description": "Неверный запрос или нет активной приёмки"})
 		return

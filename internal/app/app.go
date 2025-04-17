@@ -67,6 +67,7 @@ func Run() {
 	authHandlers.InitAuthHandlers(api)
 	PVZHandlers.InitPVZHandlers(api)
 	receptionHandlers.InitReceptionHandlers(api)
+	productHandlers.InitProductsHandlers(api)
 
 	// Initialize and configure the HTTP server
 	srv := server.NewAPIServer(r)

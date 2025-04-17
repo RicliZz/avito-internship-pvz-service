@@ -18,5 +18,4 @@ type ReceptionService interface {
 
 type ProductService interface {
 	AddProductInReception(ctx *gin.Context)
-	FindLastActiveReception(ctx *gin.Context)
 }

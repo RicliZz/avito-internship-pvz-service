@@ -6,7 +6,7 @@ import (
 )
 
 type AddProductRequest struct {
-	Type  string    `json:"type" binding:"required,oneof= электроника одежда обувь"`
+	Type  string    `json:"type" binding:"required,oneof=электроника одежда обувь"`
 	PvzID uuid.UUID `json:"pvzId" binding:"required"`
 }
 

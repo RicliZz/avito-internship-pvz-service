@@ -7,17 +7,17 @@ import (
 	"os"
 )
 
-type Product struct {
+type ProductsHandlers struct {
 	ProductService services.ProductService
 }
 
-func NewProductsHandlers(ProductService services.ProductService) *Product {
-	return &Product{
+func NewProductsHandlers(ProductService services.ProductService) *ProductsHandlers {
+	return &ProductsHandlers{
 		ProductService: ProductService,
 	}
 }
 
-func (h *Product) InitProductsHandlers(router *gin.RouterGroup) {
+func (h *ProductsHandlers) InitProductsHandlers(router *gin.RouterGroup) {
 	productsRouter := router.Group("/products")
 	productsRouter.Use(middleware.CheckRoleMiddleware(os.Getenv("JWT_SECRET"), "employee"))
 	{
