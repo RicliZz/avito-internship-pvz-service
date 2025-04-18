@@ -2,21 +2,10 @@ package receptionService
 
 import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
-	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 )
-
-type ReceptionService struct {
-	ReceptionRepo repositories.ReceptionRepo
-}
-
-func NewReceptionService(receptionRepo repositories.ReceptionRepo) *ReceptionService {
-	return &ReceptionService{
-		ReceptionRepo: receptionRepo,
-	}
-}
 
 func (s *ReceptionService) CreateReception(c *gin.Context) {
 	log.Println("Создание приёмки")

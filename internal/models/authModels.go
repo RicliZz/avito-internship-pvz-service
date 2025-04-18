@@ -12,5 +12,5 @@ type LoginParams struct {
 }
 
 type DummyLoginParams struct {
-	Role string ` json:"role" binding:"required,oneof=employee moderator"` //role must be employee / moderator, else error
+	Role string ` json:"role" binding:"required,oneof=employee moderator"` //Возможные роли: модератор/работник
 }

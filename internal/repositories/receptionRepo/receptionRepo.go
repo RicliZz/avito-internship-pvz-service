@@ -68,3 +68,56 @@ func (r *ReceptionRepository) FindLastActiveReception(PVZId uuid.UUID) (error, u
 	}
 	return nil, receptionID
 }
+
+func (r *ReceptionRepository) DeleteLastProduct(pvzID uuid.UUID) error {
+	tx, err := r.db.Begin(context.Background())
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(context.Background())
+	sqlQuery := `WITH reception_id AS (
+					SELECT "ID" FROM reception
+					WHERE "pvzID" = $1 AND status = 'in_progress'
+					FOR UPDATE
+				)
+				
+				DELETE FROM products
+				WHERE "ID" = (
+					SELECT "ID" FROM products
+					WHERE "receptionID" = (SELECT "ID" FROM reception_id)
+					ORDER BY "dateTime" DESC LIMIT 1
+				)`
+	tag, err := tx.Exec(context.Background(), sqlQuery, pvzID)
+	if err != nil {
+		log.Println("Ошибка в SQL при удалении товара")
+		return err
+	}
+	if tag.RowsAffected() == 0 {
+		log.Println("Нет открытых приёмок, удалено 0 строк")
+		return errors.New("Нет открытых приёмок ")
+	}
+	if err = tx.Commit(context.Background()); err != nil {
+		log.Println("Ошибка при коммите")
+		return err
+	}
+	return nil
+}
+
+func (r *ReceptionRepository) CloseLastReception(pvzID uuid.UUID) (error, *models.Reception) {
+	var updatedReception models.Reception
+	sqlQuery := `UPDATE reception
+				SET status = 'close'
+				WHERE "pvzID" = $1 AND status = 'in_progress'
+				RETURNING *`
+	err := r.db.QueryRow(context.Background(), sqlQuery,
+		pvzID).Scan(&updatedReception.ID, &updatedReception.DateTime, &updatedReception.PVZId, &updatedReception.Status)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			log.Println("Нет открытых приёмок, обновлено 0 строк")
+			return err, nil
+		}
+		log.Println("Ошибка при SQL запросе")
+		return err, nil
+	}
+	return nil, &updatedReception
+}

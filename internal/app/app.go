@@ -59,7 +59,7 @@ func Run() {
 	//New Handlers
 	api := r.Group("")
 	authHandlers := authentication.NewAuthHandler(loginService)
-	PVZHandlers := pvz.NewPVZHandler(PVZService)
+	PVZHandlers := pvz.NewPVZHandler(PVZService, ReceptionService)
 	receptionHandlers := reception.NewReceptionHandlers(ReceptionService)
 	productHandlers := products.NewProductsHandlers(ProductService)
 
