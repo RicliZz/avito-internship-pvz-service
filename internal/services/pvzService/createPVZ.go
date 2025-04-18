@@ -2,20 +2,9 @@ package pvzService
 
 import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
-	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories"
 	"github.com/gin-gonic/gin"
 	"log"
 )
-
-type PVZService struct {
-	PVZRepo repositories.PVZRepo
-}
-
-func NewPVZService(PVZRepo repositories.PVZRepo) *PVZService {
-	return &PVZService{
-		PVZRepo: PVZRepo,
-	}
-}
 
 func (s *PVZService) CreatePVZ(c *gin.Context) {
 	log.Println("Началось создание нового ПВЗ")

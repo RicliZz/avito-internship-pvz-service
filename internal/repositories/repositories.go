@@ -12,6 +12,7 @@ type AuthenticationRepo interface {
 
 type PVZRepo interface {
 	CreatePVZ(pvz models.CreatePVZRequest) (error, *models.PVZ)
+	GetListPVZ(filters models.QueryParamForGetPVZList) (error, []models.ListPVZResponse)
 }
 
 type ReceptionRepo interface {

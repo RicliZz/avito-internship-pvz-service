@@ -7,6 +7,7 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/api/products"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/api/pvz"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/api/reception"
+	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories/authRepo"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories/productRepo"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories/pvzRepo"
@@ -17,6 +18,8 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/pvzService"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/receptionService"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 	"log"
@@ -27,13 +30,13 @@ import (
 )
 
 func Run() {
-	//init config .env
+	//Загрузка в переменные окружения .env
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	//connect to PostgreSQL
+	//Подключение к Постгресу
 	conn, err := pgx.Connect(context.Background(), os.Getenv("POSTGRESQL_URL"))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
@@ -43,40 +46,43 @@ func Run() {
 
 	//Engine GIN
 	r := gin.Default()
-
-	//Initialize repositories
+	//Кастомные валидаторы
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v.RegisterValidation("datesForGetPVZList", models.DatesForGetPVZList)
+	}
+	//Инициализация репозиториев(БД)
 	authRepository := authRepo.NewAuthRepository(conn)
 	PVZRepository := pvzRepo.NewPVZRepository(conn)
 	receptionRepository := receptionRepo.NewReceptionRepository(conn)
 	productRepository := productRepo.NewProductRepository(conn)
 
-	//Initialize services
+	//Инициализация сервисов
 	loginService := authService.NewAuthLogin(authRepository)
 	PVZService := pvzService.NewPVZService(PVZRepository)
 	ReceptionService := receptionService.NewReceptionService(receptionRepository)
 	ProductService := productService.NewProductService(receptionRepository, productRepository)
 
-	//New Handlers
+	//Инициализация ручек
 	api := r.Group("")
 	authHandlers := authentication.NewAuthHandler(loginService)
 	PVZHandlers := pvz.NewPVZHandler(PVZService, ReceptionService)
 	receptionHandlers := reception.NewReceptionHandlers(ReceptionService)
 	productHandlers := products.NewProductsHandlers(ProductService)
 
-	//Init Handlers
+	//Привязка ручек
 	authHandlers.InitAuthHandlers(api)
 	PVZHandlers.InitPVZHandlers(api)
 	receptionHandlers.InitReceptionHandlers(api)
 	productHandlers.InitProductsHandlers(api)
 
-	// Initialize and configure the HTTP server
+	//Инициализация и конфигурация HTTP сервера
 	srv := server.NewAPIServer(r)
 	log.Printf("Starting server on %s%s", os.Getenv("SERVER_ADDRESS"), os.Getenv("PORT"))
 
-	//start server
+	//Старт сервера
 	go srv.Start()
 
-	//close server
+	//Выключение
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit

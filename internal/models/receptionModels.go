@@ -15,3 +15,8 @@ type Reception struct {
 type CreateReceptionRequest struct {
 	PVZId uuid.UUID `json:"pvzId" binding:"required"`
 }
+
+type ListReceptionResponse struct {
+	Reception
+	Products []Product
+}

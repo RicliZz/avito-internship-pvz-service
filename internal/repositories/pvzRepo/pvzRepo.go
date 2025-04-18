@@ -3,8 +3,10 @@ package pvzRepo
 import (
 	"context"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"log"
+	"time"
 )
 
 type PVZRepository struct {
@@ -29,4 +31,88 @@ func (r *PVZRepository) CreatePVZ(payload models.CreatePVZRequest) (error, *mode
 		return err, nil
 	}
 	return nil, &newPVZ
+}
+
+func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) (error, []models.ListPVZResponse) {
+
+	offset := (params.Page - 1) * params.Limit
+	sqlQuery := `SELECT "pvzID", "registrationDate", city, r."ID", r."dateTime", r.status, p."ID", p."dateTime", p.type
+				FROM "PVZ" pvz
+				JOIN reception r ON pvz."ID" = r."pvzID"
+         		JOIN products p ON p."receptionID" = r."ID"
+				WHERE r."dateTime" BETWEEN $1 AND $2
+				ORDER BY r."dateTime" DESC 
+				LIMIT $3
+				OFFSET $4`
+	rows, err := r.db.Query(context.Background(), sqlQuery, params.StartDate, params.EndDate, params.Limit, offset)
+	if err != nil {
+		return err, nil
+	}
+	defer rows.Close()
+	forDeleteDuplicatesPVZ := make(map[uuid.UUID]*models.ListPVZResponse)
+	forDeleteDuplicatesReception := make(map[uuid.UUID]*models.ListReceptionResponse)
+	var res []models.ListPVZResponse
+
+	for rows.Next() {
+		var (
+			pvzID            uuid.UUID
+			registrationDate time.Time
+			city             string
+			receptionID      uuid.UUID
+			receptionDate    time.Time
+			status           string
+			productID        uuid.UUID
+			productDate      time.Time
+			productType      string
+		)
+
+		err = rows.Scan(&pvzID, &registrationDate, &city,
+			&receptionID, &receptionDate, &status,
+			&productID, &productDate, &productType)
+		if err != nil {
+			return err, nil
+		}
+
+		findPVZ, ok := forDeleteDuplicatesPVZ[pvzID]
+		if !ok {
+			findPVZ = &models.ListPVZResponse{
+				PVZ: models.PVZ{
+					ID:               pvzID,
+					RegistrationDate: registrationDate,
+					City:             city,
+				},
+				Receptions: []models.ListReceptionResponse{},
+			}
+			forDeleteDuplicatesPVZ[pvzID] = findPVZ
+		}
+
+		findReception, ok := forDeleteDuplicatesReception[receptionID]
+		if !ok {
+			findReception = &models.ListReceptionResponse{
+				Reception: models.Reception{
+					ID:       receptionID,
+					DateTime: registrationDate,
+					PVZId:    pvzID,
+					Status:   status,
+				},
+				Products: []models.Product{},
+			}
+			forDeleteDuplicatesReception[receptionID] = findReception
+		}
+
+		product := models.Product{
+			ID:          productID,
+			DateTime:    productDate,
+			ProductType: productType,
+			ReceptionId: receptionID,
+		}
+		findReception.Products = append(findReception.Products, product)
+		findPVZ.Receptions = append(findPVZ.Receptions, *findReception)
+
+	}
+
+	for _, v := range forDeleteDuplicatesPVZ {
+		res = append(res, *v)
+	}
+	return nil, res
 }
