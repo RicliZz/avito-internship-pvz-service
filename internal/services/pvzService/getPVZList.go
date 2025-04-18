@@ -2,8 +2,8 @@ package pvzService
 
 import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
+	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 )
 
@@ -13,7 +13,9 @@ func (s *PVZService) GetPVZList(c *gin.Context) {
 		Limit: 10,
 	}
 	if err := c.ShouldBindQuery(&queryParams); err != nil {
-		log.Println("Ошибка при парсе параметров")
+		logger.Logger.Debugw("Validation failed",
+			"startDate", queryParams.StartDate,
+			"endDate", queryParams.EndDate)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

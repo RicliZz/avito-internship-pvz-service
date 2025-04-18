@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -38,11 +39,11 @@ func (s *APIServer) Shutdown(ctx context.Context) error {
 
 	switch ctx.Err() {
 	case context.DeadlineExceeded:
-		log.Println("Timeout shutting down server")
+		logger.Logger.Error("Timeout shutting down server")
 	case nil:
-		log.Println("Shutdown completed before timeout.")
+		logger.Logger.Info("Shutdown completed before timeout.")
 	default:
-		log.Println("Shutdown ended with:", ctx.Err())
+		logger.Logger.Error("Shutdown ended with:", ctx.Err())
 	}
 
 	return nil

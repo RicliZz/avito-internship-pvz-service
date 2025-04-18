@@ -3,18 +3,19 @@ package authService
 import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/JWT"
+	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 type DummyLoginService struct {
 }
 
 func (s *DummyLoginService) DummyLogin(c *gin.Context) {
-	log.Println("Dummy login service start")
+	logger.Logger.Info("DummyLogin service was started")
 	params := &models.DummyLoginParams{}
 	if err := c.ShouldBindJSON(params); err != nil {
-		log.Println("Invalid request")
+		logger.Logger.Debugw("Validation failed",
+			"role", params.Role)
 		c.JSON(400, gin.H{"description": "Неверный запрос"})
 		return
 	}

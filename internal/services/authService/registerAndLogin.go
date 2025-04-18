@@ -22,30 +22,31 @@ func NewAuthLogin(authDB repositories.AuthenticationRepo) *AuthLogin {
 }
 
 func (s *AuthLogin) Login(c *gin.Context) {
-	logger.Logger.Info("Сервис Login")
+	logger.Logger.Info("Login service was started")
 
 	user := &models.LoginParams{}
 	if err := c.ShouldBind(user); err != nil {
-		log.Println("Не прошла валидация")
+		logger.Logger.Debug("Validation failed",
+			"email", user.Email,
+			"password", user.Password)
 		c.JSON(400, gin.H{"description": "Неверный запрос"})
 		return
 	}
 
 	err, password, role := s.authDB.GetUserByEmail(user.Email)
 	if err != nil {
-		log.Println("Ошибка при получении пароля для сравнения из БД")
 		c.JSON(400, gin.H{"description": "Неверный запрос"})
 		return
 	}
 	compare := pass.ComparePassWithHash(user.Password, password)
 	if !compare {
-		log.Println("Пароли не одинаковы")
+		logger.Logger.Debug("Password not compare")
 		c.JSON(401, gin.H{"description": "Неверные учётные данные"})
 		return
 	}
 	token, err := JWT.CreateJWT(role)
 	if err != nil {
-		log.Println("Ошибка при создании токена")
+		logger.Logger.Error("Failed create JWT token")
 		return
 	}
 	c.JSON(200, gin.H{
