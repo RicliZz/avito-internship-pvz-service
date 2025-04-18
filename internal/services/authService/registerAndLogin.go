@@ -7,7 +7,6 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/pass"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 type AuthLogin struct {
@@ -29,19 +28,19 @@ func (s *AuthLogin) Login(c *gin.Context) {
 		logger.Logger.Debug("Validation failed",
 			"email", user.Email,
 			"password", user.Password)
-		c.JSON(400, gin.H{"description": "Неверный запрос"})
+		c.JSON(401, models.Error{Message: "Invalid credentials"})
 		return
 	}
 
 	err, password, role := s.authDB.GetUserByEmail(user.Email)
 	if err != nil {
-		c.JSON(400, gin.H{"description": "Неверный запрос"})
+		c.JSON(401, models.Error{Message: "Invalid credentials"})
 		return
 	}
 	compare := pass.ComparePassWithHash(user.Password, password)
 	if !compare {
 		logger.Logger.Debug("Password not compare")
-		c.JSON(401, gin.H{"description": "Неверные учётные данные"})
+		c.JSON(401, models.Error{Message: "Invalid credentials"})
 		return
 	}
 	token, err := JWT.CreateJWT(role)
@@ -49,18 +48,15 @@ func (s *AuthLogin) Login(c *gin.Context) {
 		logger.Logger.Error("Failed create JWT token")
 		return
 	}
-	c.JSON(200, gin.H{
-		"description": "Успешная авторизация",
-		"Token":       token},
-	)
+	c.JSON(200, token)
 }
 
 func (s *AuthLogin) Register(c *gin.Context) {
-	logger.Logger.Info("Сервис Register")
+	logger.Logger.Info("Register service was started")
 	var user models.RegisterParams
 	if err := c.ShouldBindJSON(&user); err != nil {
-		log.Println("Не прошла валидация")
-		c.JSON(400, gin.H{"description": "Неверный запрос"})
+		logger.Logger.Debug("Validation failed")
+		c.JSON(400, models.Error{Message: "Invalid request"})
 		return
 	}
 
@@ -68,11 +64,11 @@ func (s *AuthLogin) Register(c *gin.Context) {
 	user.Password = pass.CreateHash(user.Password)
 
 	//Создание пользователя
-	err := s.authDB.Register(user)
+	err, newUser := s.authDB.Register(user)
 	if err != nil {
-		log.Println("Ошибка при создании пользователя в БД")
-		c.JSON(400, gin.H{"description": "Неверный запрос"})
+		logger.Logger.Error("Error when creating user")
+		c.JSON(400, models.Error{Message: err.Error()})
 		return
 	}
-	c.JSON(201, gin.H{"description": "Пользователь создан"})
+	c.JSON(201, newUser)
 }

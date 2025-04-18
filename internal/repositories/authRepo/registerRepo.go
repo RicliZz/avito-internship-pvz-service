@@ -18,19 +18,20 @@ func NewAuthRepository(db *pgx.Conn) *AuthRepository {
 	}
 }
 
-func (r *AuthRepository) Register(payload models.RegisterParams) error {
+func (r *AuthRepository) Register(payload models.RegisterParams) (error, *models.User) {
 	logger.Logger.Info("Register repository was start")
-	_, err := r.db.Exec(context.Background(),
-		`INSERT INTO users (email, password, role) VALUES ($1, $2, $3)`,
-		payload.Email, payload.Password, payload.Role)
+	var newUser models.User
+	err := r.db.QueryRow(context.Background(),
+		`INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING "ID", email, role`,
+		payload.Email, payload.Password, payload.Role).Scan(&newUser.ID, newUser.Email, newUser.Role)
 
 	if err != nil {
 		logger.Logger.Errorw("Failed register user",
 			"email", payload.Email,
 			"role", payload.Role)
-		return err
+		return err, nil
 	}
-	return nil
+	return nil, &newUser
 }
 
 func (r *AuthRepository) GetUserByEmail(email string) (error, string, string) {

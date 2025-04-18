@@ -1,9 +1,9 @@
 package middleware
 
 import (
+	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"net/http"
 	"strings"
 )
 
@@ -11,7 +11,7 @@ func CheckRoleMiddleware(secret string, expectedRole string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "missing or invalid Authorization header"})
+			c.AbortWithStatusJSON(401, models.Error{Message: "Invalid Header"})
 			return
 		}
 
@@ -25,18 +25,18 @@ func CheckRoleMiddleware(secret string, expectedRole string) gin.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+			c.AbortWithStatusJSON(401, models.Error{Message: "Invalid token"})
 			return
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid claims"})
+			c.AbortWithStatusJSON(401, models.Error{Message: "Invalid token"})
 			return
 		}
 		role, ok := claims["role"].(string)
 		if !ok || role != expectedRole {
-			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "insufficient permissions"})
+			c.AbortWithStatusJSON(403, models.Error{Message: "Forbidden"})
 			return
 		}
 

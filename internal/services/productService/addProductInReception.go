@@ -26,13 +26,13 @@ func (s *ProductService) AddProductInReception(c *gin.Context) {
 		logger.Logger.Debugw("Validation failed",
 			"productType", product.Type,
 			"pvzID", product.PvzID)
-		c.JSON(400, gin.H{"description": "Неверный запрос или нет активной приёмки"})
+		c.JSON(400, models.Error{Message: "Invalid request or no active reception"})
 		return
 	}
 
 	err, receptionID := s.ReceptionRepository.FindLastActiveReception(product.PvzID)
 	if err != nil {
-		c.JSON(400, gin.H{"description": "Неверный запрос или нет активной приёмки"})
+		c.JSON(400, models.Error{Message: "Invalid request or no active reception"})
 		return
 	}
 	err, newProduct := s.ProductRepo.AddProductInActiveReception(receptionID, product.Type)

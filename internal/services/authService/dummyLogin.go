@@ -16,13 +16,13 @@ func (s *DummyLoginService) DummyLogin(c *gin.Context) {
 	if err := c.ShouldBindJSON(params); err != nil {
 		logger.Logger.Debugw("Validation failed",
 			"role", params.Role)
-		c.JSON(400, gin.H{"description": "Неверный запрос"})
+		c.JSON(400, models.Error{Message: err.Error()})
 		return
 	}
 	token, err := JWT.CreateJWT(params.Role)
 	if err != nil {
-		c.JSON(400, gin.H{"description": err.Error()})
+		c.JSON(400, models.Error{Message: err.Error()})
 		return
 	}
-	c.JSON(200, gin.H{"token": token})
+	c.JSON(200, token)
 }

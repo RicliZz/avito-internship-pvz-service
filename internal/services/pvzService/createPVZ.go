@@ -12,13 +12,14 @@ func (s *PVZService) CreatePVZ(c *gin.Context) {
 	if err := c.ShouldBindJSON(&PVZ); err != nil {
 		logger.Logger.Debugw("Validation failed",
 			"city", PVZ.City)
-		c.JSON(400, gin.H{"description": "Неверный запрос"})
+		c.JSON(400, models.Error{Message: "Invalid request"})
 		return
 	}
 	err, newPVZ := s.PVZRepo.CreatePVZ(PVZ)
 	if err != nil {
-		c.JSON(400, gin.H{"description": err})
+		logger.Logger.Error("Error when creating PVZ")
+		c.JSON(400, models.Error{Message: err.Error()})
 		return
 	}
-	c.JSON(201, gin.H{"ПВЗ создан": newPVZ})
+	c.JSON(201, newPVZ)
 }

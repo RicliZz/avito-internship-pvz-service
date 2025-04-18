@@ -6,7 +6,7 @@ import (
 )
 
 type AuthenticationRepo interface {
-	Register(payload models.RegisterParams) error
+	Register(payload models.RegisterParams) (error, *models.User)
 	GetUserByEmail(email string) (error, string, string)
 }
 

@@ -2,24 +2,23 @@ package receptionService
 
 import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
+	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/gin-gonic/gin"
-	"log"
-	"net/http"
 )
 
 func (s *ReceptionService) CreateReception(c *gin.Context) {
-	log.Println("Создание приёмки")
+	logger.Logger.Info("CreateReception service was started")
 	var reception models.CreateReceptionRequest
 	if err := c.ShouldBindJSON(&reception); err != nil {
-		log.Println("Ошибка при парсе JSON")
-		c.JSON(http.StatusBadRequest, gin.H{"description": "Неверный запрос или есть незакрытая приёмка"})
+		logger.Logger.Debug("Validation failed")
+		c.JSON(400, models.Error{Message: "Invalid request"})
 		return
 	}
 	err, newReception := s.ReceptionRepo.CreateReception(reception)
 	if err != nil {
-		log.Println(err)
-		c.JSON(400, gin.H{"description": "Неверный запрос или есть незакрытая приемка"})
+		logger.Logger.Info("Error creating reception")
+		c.JSON(400, models.Error{Message: "Invalid request"})
 		return
 	}
-	c.JSON(201, gin.H{"Приёмка создана": newReception})
+	c.JSON(201, newReception)
 }
