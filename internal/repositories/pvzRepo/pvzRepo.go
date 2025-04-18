@@ -3,9 +3,9 @@ package pvzRepo
 import (
 	"context"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
+	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"log"
 	"time"
 )
 
@@ -20,21 +20,21 @@ func NewPVZRepository(db *pgx.Conn) *PVZRepository {
 }
 
 func (r *PVZRepository) CreatePVZ(payload models.CreatePVZRequest) (error, *models.PVZ) {
-	log.Println("Репозиторий создания нового ПВЗ")
+	logger.Logger.Info("CreatePVZ repository was started")
 	var newPVZ models.PVZ
 	err := r.db.QueryRow(context.Background(), `
 		INSERT INTO "PVZ" (city) VALUES ($1)
 		RETURNING "ID", "registrationDate", city`,
 		payload.City).Scan(&newPVZ.ID, &newPVZ.RegistrationDate, &newPVZ.City)
 	if err != nil {
-		log.Println("Ошибка SQL запроса на создание нового ПВЗ")
+		logger.Logger.Error("Failed create new PVZ")
 		return err, nil
 	}
 	return nil, &newPVZ
 }
 
 func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) (error, []models.ListPVZResponse) {
-
+	logger.Logger.Info("GetListPVZ repository was started")
 	offset := (params.Page - 1) * params.Limit
 	sqlQuery := `SELECT "pvzID", "registrationDate", city, r."ID", r."dateTime", r.status, p."ID", p."dateTime", p.type
 				FROM "PVZ" pvz

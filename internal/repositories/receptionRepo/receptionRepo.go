@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
+	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"log"
@@ -55,6 +56,7 @@ func (r *ReceptionRepository) CreateReception(payload models.CreateReceptionRequ
 }
 
 func (r *ReceptionRepository) FindLastActiveReception(PVZId uuid.UUID) (error, uuid.UUID) {
+	logger.Logger.Info("FindLastActiveReception repository was started")
 	var receptionID uuid.UUID
 	sqlQuery := `SELECT "ID" FROM reception
 				 WHERE "pvzID" = $1 AND status = 'in_progress' 
@@ -62,6 +64,8 @@ func (r *ReceptionRepository) FindLastActiveReception(PVZId uuid.UUID) (error, u
 	err := r.db.QueryRow(context.Background(), sqlQuery, PVZId).Scan(&receptionID)
 	if err != nil {
 		if err == pgx.ErrNoRows {
+			logger.Logger.Debugw("Don't find active reception with",
+				"pvzID", PVZId)
 			return errors.New("Нет открытых приёмок, добавлять товар некуда"), uuid.Nil
 		}
 		return err, uuid.Nil
@@ -70,6 +74,7 @@ func (r *ReceptionRepository) FindLastActiveReception(PVZId uuid.UUID) (error, u
 }
 
 func (r *ReceptionRepository) DeleteLastProduct(pvzID uuid.UUID) error {
+	logger.Logger.Info("DeleteLastProduct repository was started")
 	tx, err := r.db.Begin(context.Background())
 	if err != nil {
 		return err
@@ -89,21 +94,22 @@ func (r *ReceptionRepository) DeleteLastProduct(pvzID uuid.UUID) error {
 				)`
 	tag, err := tx.Exec(context.Background(), sqlQuery, pvzID)
 	if err != nil {
-		log.Println("Ошибка в SQL при удалении товара")
+		logger.Logger.Error("Error when SQL deleting product from reception")
 		return err
 	}
 	if tag.RowsAffected() == 0 {
-		log.Println("Нет открытых приёмок, удалено 0 строк")
+		logger.Logger.Debugw("Don't find active reception, deleted 0 rows")
 		return errors.New("Нет открытых приёмок ")
 	}
 	if err = tx.Commit(context.Background()); err != nil {
-		log.Println("Ошибка при коммите")
+		logger.Logger.Error("Failed commit transaction")
 		return err
 	}
 	return nil
 }
 
 func (r *ReceptionRepository) CloseLastReception(pvzID uuid.UUID) (error, *models.Reception) {
+	logger.Logger.Info("CloseLastReception repository was started")
 	var updatedReception models.Reception
 	sqlQuery := `UPDATE reception
 				SET status = 'close'
@@ -113,10 +119,10 @@ func (r *ReceptionRepository) CloseLastReception(pvzID uuid.UUID) (error, *model
 		pvzID).Scan(&updatedReception.ID, &updatedReception.DateTime, &updatedReception.PVZId, &updatedReception.Status)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			log.Println("Нет открытых приёмок, обновлено 0 строк")
+			logger.Logger.Debugw("Don't find active reception, closed 0 rows")
 			return err, nil
 		}
-		log.Println("Ошибка при SQL запросе")
+		logger.Logger.Error("Error when updating reception")
 		return err, nil
 	}
 	return nil, &updatedReception

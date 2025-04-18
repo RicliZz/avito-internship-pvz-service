@@ -4,6 +4,7 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/JWT"
+	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/pass"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -21,7 +22,7 @@ func NewAuthLogin(authDB repositories.AuthenticationRepo) *AuthLogin {
 }
 
 func (s *AuthLogin) Login(c *gin.Context) {
-	log.Println("Сервис Login")
+	logger.Logger.Info("Сервис Login")
 
 	user := &models.LoginParams{}
 	if err := c.ShouldBind(user); err != nil {
@@ -54,7 +55,7 @@ func (s *AuthLogin) Login(c *gin.Context) {
 }
 
 func (s *AuthLogin) Register(c *gin.Context) {
-	log.Println("Сервис регистрации")
+	logger.Logger.Info("Сервис Register")
 	var user models.RegisterParams
 	if err := c.ShouldBindJSON(&user); err != nil {
 		log.Println("Не прошла валидация")

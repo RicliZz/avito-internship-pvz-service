@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-	"fmt"
 	authentication "github.com/RicliZz/avito-internship-pvz-service/internal/api/auth"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/api/products"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/api/pvz"
@@ -17,12 +16,12 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/productService"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/pvzService"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/receptionService"
+	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -30,21 +29,22 @@ import (
 )
 
 func Run() {
+	defer logger.Logger.Sync()
 	//Загрузка в переменные окружения .env
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		logger.Logger.Fatal("Error loading .env file")
 	}
 
 	//Подключение к Постгресу
 	conn, err := pgx.Connect(context.Background(), os.Getenv("POSTGRESQL_URL"))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		logger.Logger.Infow("Unable to connect to database:",
+			"error", err)
 		os.Exit(1)
 	}
 	defer conn.Close(context.Background())
 
-	//Engine GIN
 	r := gin.Default()
 	//Кастомные валидаторы
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
@@ -77,7 +77,6 @@ func Run() {
 
 	//Инициализация и конфигурация HTTP сервера
 	srv := server.NewAPIServer(r)
-	log.Printf("Starting server on %s%s", os.Getenv("SERVER_ADDRESS"), os.Getenv("PORT"))
 
 	//Старт сервера
 	go srv.Start()
@@ -86,11 +85,12 @@ func Run() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
-	log.Println("Shutting down server...")
+	logger.Logger.Info("Shutting down server...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalf("Shutdown error: %v", err)
+	if err = srv.Shutdown(ctx); err != nil {
+		logger.Logger.Fatalw("Shutdown error",
+			"error", err)
 	}
 
 }

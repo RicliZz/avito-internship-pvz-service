@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
+	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/jackc/pgx/v5"
-	"log"
 )
 
 type AuthRepository struct {
@@ -19,20 +19,22 @@ func NewAuthRepository(db *pgx.Conn) *AuthRepository {
 }
 
 func (r *AuthRepository) Register(payload models.RegisterParams) error {
-	log.Println("Register rep is start")
+	logger.Logger.Info("Register repository was start")
 	_, err := r.db.Exec(context.Background(),
 		`INSERT INTO users (email, password, role) VALUES ($1, $2, $3)`,
 		payload.Email, payload.Password, payload.Role)
 
 	if err != nil {
-		log.Println("Error with INSERT in USERS")
+		logger.Logger.Errorw("Failed register user",
+			"email", payload.Email,
+			"role", payload.Role)
 		return err
 	}
 	return nil
 }
 
 func (r *AuthRepository) GetUserByEmail(email string) (error, string, string) {
-	log.Println("GetUserByEmail is start")
+	logger.Logger.Info("GetUserByEmail repository was started")
 	var password string
 	var role string
 
@@ -40,6 +42,7 @@ func (r *AuthRepository) GetUserByEmail(email string) (error, string, string) {
 		email).Scan(&password, &role)
 	if err != nil {
 		if err == pgx.ErrNoRows {
+			logger.Logger.Debugw("Don't find user with email", "email", email)
 			return fmt.Errorf("пользователь с email %s не найден", email), "", ""
 		}
 		return err, "", ""
