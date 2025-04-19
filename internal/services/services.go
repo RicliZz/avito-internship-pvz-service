@@ -11,6 +11,7 @@ type AuthenticationService interface {
 type PVZService interface {
 	CreatePVZ(ctx *gin.Context)
 	GetPVZList(ctx *gin.Context)
+	GetPVZListFromRPCServer(ctx *gin.Context)
 }
 
 type ReceptionService interface {

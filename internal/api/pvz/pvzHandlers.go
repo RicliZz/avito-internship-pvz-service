@@ -26,6 +26,7 @@ func (h *PVZHandler) InitPVZHandlers(router *gin.RouterGroup) {
 	{
 		pvzModeratorRouter.POST("", h.pvzService.CreatePVZ)
 		pvzModeratorRouter.GET("", h.pvzService.GetPVZList)
+		pvzModeratorRouter.GET("/grpc", h.pvzService.GetPVZListFromRPCServer)
 	}
 
 	pvzEmployeeRouter := router.Group("/pvz")

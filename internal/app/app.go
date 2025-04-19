@@ -25,7 +25,6 @@ import (
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -49,19 +48,14 @@ func RunApp() {
 	}
 	defer conn.Close(context.Background())
 
+	//Подключение к удалённому серверу
 	conngRPC, err := grpc.NewClient(os.Getenv("PVZ_GRPC_ADDR")+os.Getenv("PVZ_GRPC_PORT"), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		logger.Logger.Error("did not connect: %v", err)
 	}
 	defer conngRPC.Close()
-	c := pvz_v1.NewPVZServiceClient(conngRPC)
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	req, err := c.GetPVZList(ctx, &pvz_v1.GetPVZListRequest{})
-	if err != nil {
-		log.Fatalf("could not greet: %v", err)
-	}
-	log.Printf("Greeting: %s", req.Pvzs)
+
+	clientRPC := pvz_v1.NewPVZServiceClient(conngRPC)
 
 	r := gin.Default()
 	//Кастомные валидаторы
@@ -76,7 +70,7 @@ func RunApp() {
 
 	//Инициализация сервисов
 	loginService := authService.NewAuthLogin(authRepository)
-	PVZService := pvzService.NewPVZService(PVZRepository)
+	PVZService := pvzService.NewPVZService(PVZRepository, clientRPC)
 	ReceptionService := receptionService.NewReceptionService(receptionRepository)
 	ProductService := productService.NewProductService(receptionRepository, productRepository)
 
@@ -104,7 +98,7 @@ func RunApp() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	logger.Logger.Info("Shutting down server...")
-	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err = srv.Shutdown(ctx); err != nil {
 		logger.Logger.Fatalw("Shutdown error",

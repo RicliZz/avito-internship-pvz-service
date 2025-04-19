@@ -22,3 +22,11 @@
 {"level":"info","timestamp":"2025-04-19T17:34:41.382+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":36195}
 {"level":"info","timestamp":"2025-04-19T18:20:40.156+0300","caller":"app/app.go:106","msg":"Shutting down server...","pid":38805}
 {"level":"info","timestamp":"2025-04-19T18:20:40.159+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":38805}
+{"level":"info","timestamp":"2025-04-19T18:46:18.395+0300","caller":"app/app.go:106","msg":"Shutting down server...","pid":40942}
+{"level":"info","timestamp":"2025-04-19T18:46:18.396+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":40942}
+{"level":"info","timestamp":"2025-04-19T18:58:58.897+0300","caller":"app/app.go:106","msg":"Shutting down server...","pid":43464}
+{"level":"info","timestamp":"2025-04-19T18:58:58.898+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":43464}
+{"level":"info","timestamp":"2025-04-19T19:13:05.332+0300","caller":"authService/registerAndLogin.go:24","msg":"Login service was started","pid":45135}
+{"level":"info","timestamp":"2025-04-19T19:13:05.336+0300","caller":"authRepo/registerRepo.go:38","msg":"GetUserByEmail repository was started","pid":45135}
+{"level":"info","timestamp":"2025-04-19T19:13:49.977+0300","caller":"app/app.go:100","msg":"Shutting down server...","pid":45135}
+{"level":"info","timestamp":"2025-04-19T19:13:49.980+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":45135}
