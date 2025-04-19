@@ -30,3 +30,16 @@
 {"level":"info","timestamp":"2025-04-19T19:13:05.336+0300","caller":"authRepo/registerRepo.go:38","msg":"GetUserByEmail repository was started","pid":45135}
 {"level":"info","timestamp":"2025-04-19T19:13:49.977+0300","caller":"app/app.go:100","msg":"Shutting down server...","pid":45135}
 {"level":"info","timestamp":"2025-04-19T19:13:49.980+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":45135}
+{"level":"info","timestamp":"2025-04-19T21:57:57.369+0300","caller":"app/app.go:100","msg":"Shutting down server...","pid":69410}
+{"level":"info","timestamp":"2025-04-19T21:57:57.373+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":69410}
+{"level":"info","timestamp":"2025-04-19T22:11:28.638+0300","caller":"app/app.go:45","msg":"Unable to connect to database:","pid":85563,"error":"failed to connect to `user=postgres database=avito_internship`: hostname resolving error: lookup avito_postgres: no such host"}
+{"level":"info","timestamp":"2025-04-19T22:13:18.022+0300","caller":"app/app.go:100","msg":"Shutting down server...","pid":85832}
+{"level":"info","timestamp":"2025-04-19T22:13:18.025+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":85832}
+{"level":"info","timestamp":"2025-04-19T22:13:23.268+0300","caller":"app/app.go:100","msg":"Shutting down server...","pid":86066}
+{"level":"info","timestamp":"2025-04-19T22:13:23.269+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":86066}
+{"level":"info","timestamp":"2025-04-19T22:13:25.711+0300","caller":"app/app.go:45","msg":"Unable to connect to database:","pid":86187,"error":"failed to connect to `user=postgres database=avito_internship`:\n\t[::1]:5431 (localhost): dial error: dial tcp [::1]:5431: connect: connection refused\n\t127.0.0.1:5431 (localhost): dial error: dial tcp 127.0.0.1:5431: connect: connection refused"}
+{"level":"info","timestamp":"2025-04-19T22:17:44.438+0300","caller":"authService/registerAndLogin.go:24","msg":"Login service was started","pid":87664}
+{"level":"info","timestamp":"2025-04-19T22:17:44.441+0300","caller":"authRepo/registerRepo.go:38","msg":"GetUserByEmail repository was started","pid":87664}
+{"level":"info","timestamp":"2025-04-19T22:18:03.003+0300","caller":"app/app.go:100","msg":"Shutting down server...","pid":87664}
+{"level":"info","timestamp":"2025-04-19T22:18:03.005+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":87664}
+{"level":"info","timestamp":"2025-04-20T00:28:19.483+0300","caller":"app/app.go:45","msg":"Unable to connect to database:","pid":111554,"error":"failed to connect to `user=postgres database=avito_internship`: hostname resolving error: lookup avito_postgres: no such host"}

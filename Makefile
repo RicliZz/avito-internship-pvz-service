@@ -4,9 +4,9 @@ include .env
 export
 
 build:
-	@go build -o ./cmd/mainApp/bin ./cmd/mainApp/main.go
+	@go build -o ./bin/mainApp ./cmd/mainApp/main.go
 run:build
-	./cmd/mainApp/bin
+	./bin/mainApp
 migrate:
 	@migrate create -ext sql -dir db/migrations -seq ${name}
 migrate-up:
