@@ -5,6 +5,7 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/repositories"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type ProductService struct {
@@ -18,6 +19,11 @@ func NewProductService(ReceptionRepository repositories.ReceptionRepo, ProductRe
 		ProductRepo:         ProductRepo,
 	}
 }
+
+var CountAddedProduct = prometheus.NewCounter(prometheus.CounterOpts{
+	Name: "added_product_count",
+	Help: "Total number of added Products",
+})
 
 func (s *ProductService) AddProductInReception(c *gin.Context) {
 	logger.Logger.Info("AddProductInReception service was started")
@@ -40,5 +46,6 @@ func (s *ProductService) AddProductInReception(c *gin.Context) {
 		c.JSON(400, gin.H{"description": err.Error()})
 		return
 	}
+	CountAddedProduct.Inc()
 	c.JSON(201, newProduct)
 }

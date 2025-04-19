@@ -43,3 +43,29 @@
 {"level":"info","timestamp":"2025-04-19T22:18:03.003+0300","caller":"app/app.go:100","msg":"Shutting down server...","pid":87664}
 {"level":"info","timestamp":"2025-04-19T22:18:03.005+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":87664}
 {"level":"info","timestamp":"2025-04-20T00:28:19.483+0300","caller":"app/app.go:45","msg":"Unable to connect to database:","pid":111554,"error":"failed to connect to `user=postgres database=avito_internship`: hostname resolving error: lookup avito_postgres: no such host"}
+{"level":"info","timestamp":"2025-04-20T00:29:15.039+0300","caller":"app/app.go:100","msg":"Shutting down server...","pid":111842}
+{"level":"info","timestamp":"2025-04-20T00:29:15.039+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":111842}
+{"level":"info","timestamp":"2025-04-20T00:30:25.179+0300","caller":"app/app.go:100","msg":"Shutting down server...","pid":112128}
+{"level":"info","timestamp":"2025-04-20T00:30:25.179+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":112128}
+{"level":"info","timestamp":"2025-04-20T00:39:31.314+0300","caller":"authService/registerAndLogin.go:24","msg":"Login service was started","pid":113482}
+{"level":"info","timestamp":"2025-04-20T00:39:31.317+0300","caller":"authRepo/registerRepo.go:38","msg":"GetUserByEmail repository was started","pid":113482}
+{"level":"info","timestamp":"2025-04-20T00:40:45.919+0300","caller":"authService/registerAndLogin.go:24","msg":"Login service was started","pid":113482}
+{"level":"info","timestamp":"2025-04-20T00:40:45.922+0300","caller":"authRepo/registerRepo.go:38","msg":"GetUserByEmail repository was started","pid":113482}
+{"level":"info","timestamp":"2025-04-20T00:41:22.775+0300","caller":"pvzService/createPVZ.go:16","msg":"CreatePVZ service was started","pid":113482}
+{"level":"info","timestamp":"2025-04-20T00:41:22.777+0300","caller":"pvzRepo/pvzRepo.go:23","msg":"CreatePVZ repository was started","pid":113482}
+{"level":"info","timestamp":"2025-04-20T00:41:37.983+0300","caller":"app/app.go:106","msg":"Shutting down server...","pid":113482}
+{"level":"info","timestamp":"2025-04-20T00:41:37.984+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":113482}
+{"level":"info","timestamp":"2025-04-20T00:42:49.235+0300","caller":"app/app.go:106","msg":"Shutting down server...","pid":113974}
+{"level":"info","timestamp":"2025-04-20T00:42:49.236+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":113974}
+{"level":"info","timestamp":"2025-04-20T00:47:54.664+0300","caller":"pvzService/createPVZ.go:16","msg":"CreatePVZ service was started","pid":114481}
+{"level":"info","timestamp":"2025-04-20T00:47:54.664+0300","caller":"pvzRepo/pvzRepo.go:23","msg":"CreatePVZ repository was started","pid":114481}
+{"level":"info","timestamp":"2025-04-20T00:48:22.854+0300","caller":"pvzService/createPVZ.go:16","msg":"CreatePVZ service was started","pid":114481}
+{"level":"info","timestamp":"2025-04-20T01:11:58.759+0300","caller":"app/app.go:109","msg":"Shutting down server...","pid":114481}
+{"level":"info","timestamp":"2025-04-20T01:11:58.769+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":114481}
+{"level":"info","timestamp":"2025-04-20T01:36:21.947+0300","caller":"authService/registerAndLogin.go:24","msg":"Login service was started","pid":117868}
+{"level":"info","timestamp":"2025-04-20T01:36:21.947+0300","caller":"authRepo/registerRepo.go:38","msg":"GetUserByEmail repository was started","pid":117868}
+{"level":"info","timestamp":"2025-04-20T01:38:04.344+0300","caller":"pvzService/createPVZ.go:16","msg":"CreatePVZ service was started","pid":117868}
+{"level":"info","timestamp":"2025-04-20T01:38:04.347+0300","caller":"pvzRepo/pvzRepo.go:23","msg":"CreatePVZ repository was started","pid":117868}
+{"level":"info","timestamp":"2025-04-20T01:39:13.404+0300","caller":"pvzService/createPVZ.go:16","msg":"CreatePVZ service was started","pid":117868}
+{"level":"info","timestamp":"2025-04-20T01:39:25.663+0300","caller":"app/app.go:111","msg":"Shutting down server...","pid":117868}
+{"level":"info","timestamp":"2025-04-20T01:39:25.663+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":117868}

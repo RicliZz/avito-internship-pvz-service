@@ -17,12 +17,15 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/pvzService"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/receptionService"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
+	"github.com/RicliZz/avito-internship-pvz-service/pkg/middleware"
 	pvz_v1 "github.com/RicliZz/avito-internship-pvz-service/pkg/proto"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"
@@ -62,6 +65,14 @@ func RunApp() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("datesForGetPVZList", models.DatesForGetPVZList)
 	}
+
+	//Prometheus
+	prometheus.MustRegister(pvzService.CountCreatedPVZ)
+	prometheus.MustRegister(receptionService.CountCreatedReception)
+	prometheus.MustRegister(productService.CountAddedProduct)
+	prometheus.MustRegister(middleware.CountAllRequests)
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
+
 	//Инициализация репозиториев(БД)
 	authRepository := authRepo.NewAuthRepository(conn)
 	PVZRepository := pvzRepo.NewPVZRepository(conn)

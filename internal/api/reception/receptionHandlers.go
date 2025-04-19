@@ -19,6 +19,7 @@ func NewReceptionHandlers(receptionService services.ReceptionService) *Reception
 
 func (h *ReceptionHandlers) InitReceptionHandlers(router *gin.RouterGroup) {
 	receptionRouter := router.Group("/receptions")
+	receptionRouter.Use(middleware.RequestCounterMiddleware())
 	receptionRouter.Use(middleware.CheckRoleMiddleware(os.Getenv("JWT_SECRET"), "employee"))
 	{
 		receptionRouter.POST("", h.ReceptionService.CreateReception)
