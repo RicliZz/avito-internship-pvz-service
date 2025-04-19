@@ -9,3 +9,16 @@
 [GIN-debug] POST   /receptions               --> github.com/RicliZz/avito-internship-pvz-service/internal/services.ReceptionService.CreateReception-fm (4 handlers)
 [GIN-debug] POST   /products                 --> github.com/RicliZz/avito-internship-pvz-service/internal/services.ProductService.AddProductInReception-fm (4 handlers)
 {"level":"info","timestamp":"2025-04-18T23:13:54.212+0300","caller":"authService/registerAndLogin.go:25","msg":"Сервис Login","pid":67793}
+[GIN-debug] POST   /dummyLogin               --> github.com/RicliZz/avito-internship-pvz-service/internal/services.AuthenticationService.DummyLogin-fm (3 handlers)
+[GIN-debug] POST   /register                 --> github.com/RicliZz/avito-internship-pvz-service/internal/services.AuthenticationService.Register-fm (3 handlers)
+[GIN-debug] POST   /login                    --> github.com/RicliZz/avito-internship-pvz-service/internal/services.AuthenticationService.Login-fm (3 handlers)
+[GIN-debug] POST   /pvz                      --> github.com/RicliZz/avito-internship-pvz-service/internal/services.PVZService.CreatePVZ-fm (4 handlers)
+[GIN-debug] GET    /pvz                      --> github.com/RicliZz/avito-internship-pvz-service/internal/services.PVZService.GetPVZList-fm (4 handlers)
+[GIN-debug] POST   /pvz/:pvzId/delete_last_product --> github.com/RicliZz/avito-internship-pvz-service/internal/services.ReceptionService.DeleteLastProductInActiveReception-fm (4 handlers)
+[GIN-debug] POST   /pvz/:pvzId/close_last_reception --> github.com/RicliZz/avito-internship-pvz-service/internal/services.ReceptionService.CloseLastReception-fm (4 handlers)
+[GIN-debug] POST   /receptions               --> github.com/RicliZz/avito-internship-pvz-service/internal/services.ReceptionService.CreateReception-fm (4 handlers)
+[GIN-debug] POST   /products                 --> github.com/RicliZz/avito-internship-pvz-service/internal/services.ProductService.AddProductInReception-fm (4 handlers)
+{"level":"info","timestamp":"2025-04-19T17:34:41.381+0300","caller":"app/app.go:88","msg":"Shutting down server...","pid":36195}
+{"level":"info","timestamp":"2025-04-19T17:34:41.382+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":36195}
+{"level":"info","timestamp":"2025-04-19T18:20:40.156+0300","caller":"app/app.go:106","msg":"Shutting down server...","pid":38805}
+{"level":"info","timestamp":"2025-04-19T18:20:40.159+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":38805}

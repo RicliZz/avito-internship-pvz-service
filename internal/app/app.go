@@ -17,18 +17,22 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/pvzService"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/services/receptionService"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
+	pvz_v1 "github.com/RicliZz/avito-internship-pvz-service/pkg/proto"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 )
 
-func Run() {
+func RunApp() {
 	defer logger.Logger.Sync()
 	//Загрузка в переменные окружения .env
 	err := godotenv.Load()
@@ -44,6 +48,20 @@ func Run() {
 		os.Exit(1)
 	}
 	defer conn.Close(context.Background())
+
+	conngRPC, err := grpc.NewClient(os.Getenv("PVZ_GRPC_ADDR")+os.Getenv("PVZ_GRPC_PORT"), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conngRPC.Close()
+	c := pvz_v1.NewPVZServiceClient(conngRPC)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	req, err := c.GetPVZList(ctx, &pvz_v1.GetPVZListRequest{})
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	log.Printf("Greeting: %s", req.Pvzs)
 
 	r := gin.Default()
 	//Кастомные валидаторы
@@ -86,7 +104,7 @@ func Run() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	logger.Logger.Info("Shutting down server...")
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err = srv.Shutdown(ctx); err != nil {
 		logger.Logger.Fatalw("Shutdown error",
