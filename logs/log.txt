@@ -69,3 +69,6 @@
 {"level":"info","timestamp":"2025-04-20T01:39:13.404+0300","caller":"pvzService/createPVZ.go:16","msg":"CreatePVZ service was started","pid":117868}
 {"level":"info","timestamp":"2025-04-20T01:39:25.663+0300","caller":"app/app.go:111","msg":"Shutting down server...","pid":117868}
 {"level":"info","timestamp":"2025-04-20T01:39:25.663+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":117868}
+{"level":"info","timestamp":"2025-04-20T02:28:21.040+0300","caller":"app/app.go:48","msg":"Unable to connect to database:","pid":142499,"error":"failed to connect to `user=postgres database=avito_internship`: hostname resolving error: lookup avito_postgres: no such host"}
+{"level":"info","timestamp":"2025-04-20T02:28:46.213+0300","caller":"app/app.go:112","msg":"Shutting down server...","pid":142623}
+{"level":"info","timestamp":"2025-04-20T02:28:46.213+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":142623}

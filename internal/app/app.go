@@ -71,7 +71,11 @@ func RunApp() {
 	prometheus.MustRegister(receptionService.CountCreatedReception)
 	prometheus.MustRegister(productService.CountAddedProduct)
 	prometheus.MustRegister(middleware.CountAllRequests)
+	prometheus.MustRegister(middleware.MeasureResponseDuration)
 	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
+
+	r.Use(middleware.RequestCounterMiddleware())
+	r.Use(middleware.ResponseDurationMiddleware())
 
 	//Инициализация репозиториев(БД)
 	authRepository := authRepo.NewAuthRepository(conn)

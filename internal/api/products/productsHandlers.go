@@ -19,7 +19,6 @@ func NewProductsHandlers(ProductService services.ProductService) *ProductsHandle
 
 func (h *ProductsHandlers) InitProductsHandlers(router *gin.RouterGroup) {
 	productsRouter := router.Group("/products")
-	productsRouter.Use(middleware.RequestCounterMiddleware())
 	productsRouter.Use(middleware.CheckRoleMiddleware(os.Getenv("JWT_SECRET"), "employee"))
 	{
 		productsRouter.POST("", h.ProductService.AddProductInReception)

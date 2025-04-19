@@ -21,7 +21,6 @@ func NewPVZHandler(pvzService services.PVZService, receptionService services.Rec
 
 func (h *PVZHandler) InitPVZHandlers(router *gin.RouterGroup) {
 	pvzModeratorRouter := router.Group("/pvz")
-	pvzModeratorRouter.Use(middleware.RequestCounterMiddleware())
 	pvzModeratorRouter.Use(middleware.CheckRoleMiddleware(os.Getenv("JWT_SECRET"), "moderator"))
 
 	{
@@ -31,7 +30,6 @@ func (h *PVZHandler) InitPVZHandlers(router *gin.RouterGroup) {
 	}
 
 	pvzEmployeeRouter := router.Group("/pvz")
-	pvzEmployeeRouter.Use(middleware.RequestCounterMiddleware())
 	pvzEmployeeRouter.Use(middleware.CheckRoleMiddleware(os.Getenv("JWT_SECRET"), "employee"))
 
 	{
