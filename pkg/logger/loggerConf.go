@@ -1,7 +1,6 @@
 package logger
 
 import (
-	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
@@ -10,11 +9,7 @@ import (
 
 var Logger *zap.SugaredLogger
 
-func init() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+func InitLogger() {
 
 	dev := false
 	encoderCfg := zap.NewProductionEncoderConfig()

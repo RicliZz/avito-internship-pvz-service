@@ -35,6 +35,7 @@ import (
 )
 
 func RunApp() {
+	logger.InitLogger()
 	defer logger.Logger.Sync()
 	//Загрузка в переменные окружения .env
 	err := godotenv.Load(".env")
