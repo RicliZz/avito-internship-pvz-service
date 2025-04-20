@@ -18,7 +18,7 @@ type CreatePVZRequest struct {
 
 type ListPVZResponse struct {
 	PVZ
-	Receptions []ListReceptionResponse
+	Receptions []*ListReceptionResponse
 }
 
 type QueryParamForGetPVZList struct {

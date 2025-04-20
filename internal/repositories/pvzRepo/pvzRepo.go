@@ -36,21 +36,30 @@ func (r *PVZRepository) CreatePVZ(payload models.CreatePVZRequest) (error, *mode
 func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) (error, []models.ListPVZResponse) {
 	logger.Logger.Info("GetListPVZ repository was started")
 	offset := (params.Page - 1) * params.Limit
-	sqlQuery := `SELECT "pvzID", "registrationDate", city, r."ID", r."dateTime", r.status, p."ID", p."dateTime", p.type
-				FROM "PVZ" pvz
-				JOIN reception r ON pvz."ID" = r."pvzID"
-         		JOIN products p ON p."receptionID" = r."ID"
-				WHERE r."dateTime" BETWEEN $1 AND $2
-				ORDER BY r."dateTime" DESC 
-				LIMIT $3
-				OFFSET $4`
+
+	sqlQuery := `
+		SELECT "pvzID", "registrationDate", city,
+		       r."ID", r."dateTime", r.status,
+		       p."ID", p."dateTime", p.type
+		FROM "PVZ" pvz
+		JOIN reception r ON pvz."ID" = r."pvzID"
+		JOIN products p ON p."receptionID" = r."ID"
+		WHERE r."dateTime" BETWEEN $1 AND $2
+		ORDER BY r."dateTime" DESC 
+		LIMIT $3
+		OFFSET $4
+	`
+
 	rows, err := r.db.Query(context.Background(), sqlQuery, params.StartDate, params.EndDate, params.Limit, offset)
 	if err != nil {
 		return err, nil
 	}
 	defer rows.Close()
+
 	forDeleteDuplicatesPVZ := make(map[uuid.UUID]*models.ListPVZResponse)
 	forDeleteDuplicatesReception := make(map[uuid.UUID]*models.ListReceptionResponse)
+	receptionAlreadyAdded := make(map[uuid.UUID]bool)
+
 	var res []models.ListPVZResponse
 
 	for rows.Next() {
@@ -81,7 +90,7 @@ func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) (error
 					RegistrationDate: registrationDate,
 					City:             city,
 				},
-				Receptions: []models.ListReceptionResponse{},
+				Receptions: []*models.ListReceptionResponse{},
 			}
 			forDeleteDuplicatesPVZ[pvzID] = findPVZ
 		}
@@ -91,7 +100,7 @@ func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) (error
 			findReception = &models.ListReceptionResponse{
 				Reception: models.Reception{
 					ID:       receptionID,
-					DateTime: registrationDate,
+					DateTime: receptionDate,
 					PVZId:    pvzID,
 					Status:   status,
 				},
@@ -100,19 +109,21 @@ func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) (error
 			forDeleteDuplicatesReception[receptionID] = findReception
 		}
 
-		product := models.Product{
+		findReception.Products = append(findReception.Products, models.Product{
 			ID:          productID,
-			DateTime:    productDate,
 			ProductType: productType,
-			ReceptionId: receptionID,
-		}
-		findReception.Products = append(findReception.Products, product)
-		findPVZ.Receptions = append(findPVZ.Receptions, *findReception)
+			DateTime:    productDate,
+		})
 
+		if !receptionAlreadyAdded[receptionID] {
+			findPVZ.Receptions = append(findPVZ.Receptions, findReception)
+			receptionAlreadyAdded[receptionID] = true
+		}
 	}
 
 	for _, v := range forDeleteDuplicatesPVZ {
 		res = append(res, *v)
 	}
+
 	return nil, res
 }
