@@ -72,3 +72,18 @@
 {"level":"info","timestamp":"2025-04-20T02:28:21.040+0300","caller":"app/app.go:48","msg":"Unable to connect to database:","pid":142499,"error":"failed to connect to `user=postgres database=avito_internship`: hostname resolving error: lookup avito_postgres: no such host"}
 {"level":"info","timestamp":"2025-04-20T02:28:46.213+0300","caller":"app/app.go:112","msg":"Shutting down server...","pid":142623}
 {"level":"info","timestamp":"2025-04-20T02:28:46.213+0300","caller":"server/server.go:44","msg":"Shutdown completed before timeout.","pid":142623}
+{"level":"info","timestamp":"2025-04-20T03:30:40.259+0300","caller":"app/app.go:48","msg":"Unable to connect to database:","pid":161017,"error":"failed to connect to `user=postgres database=avito_internship`: hostname resolving error: lookup avito_postgres: no such host"}
+{"level":"info","timestamp":"2025-04-20T03:58:18.393+0300","caller":"authService/registerAndLogin.go:55","msg":"Register service was started","pid":29936}
+{"level":"info","timestamp":"2025-04-20T03:58:18.420+0300","caller":"authRepo/registerRepo.go:22","msg":"Register repository was start","pid":29936}
+{"level":"error","timestamp":"2025-04-20T03:58:18.429+0300","caller":"authRepo/registerRepo.go:29","msg":"Failed register user","pid":29936,"email":"moderator@mail.ru","role":"moderator"}
+{"level":"error","timestamp":"2025-04-20T03:58:18.430+0300","caller":"authService/registerAndLogin.go:69","msg":"Error when creating user","pid":29936}
+{"level":"info","timestamp":"2025-04-20T03:58:25.953+0300","caller":"app/app.go:115","msg":"Shutting down server...","pid":29936}
+{"level":"info","timestamp":"2025-04-20T03:58:25.953+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":29936}
+{"level":"info","timestamp":"2025-04-20T04:01:35.097+0300","caller":"app/app.go:48","msg":"Unable to connect to database:","pid":35263,"error":"failed to connect to `user=postgres database=avito_internship`: hostname resolving error: lookup avito_postgres: no such host"}
+{"level":"info","timestamp":"2025-04-20T04:01:43.710+0300","caller":"authService/registerAndLogin.go:55","msg":"Register service was started","pid":35401}
+{"level":"info","timestamp":"2025-04-20T04:01:43.738+0300","caller":"authRepo/registerRepo.go:22","msg":"Register repository was start","pid":35401}
+{"level":"error","timestamp":"2025-04-20T04:01:43.741+0300","caller":"authRepo/registerRepo.go:29","msg":"Failed register user","pid":35401,"email":"employee@mail.ru","role":"employee"}
+{"level":"error","timestamp":"2025-04-20T04:01:43.741+0300","caller":"authService/registerAndLogin.go:69","msg":"Error when creating user","pid":35401}
+{"level":"info","timestamp":"2025-04-20T04:03:00.721+0300","caller":"app/app.go:115","msg":"Shutting down server...","pid":35401}
+{"level":"info","timestamp":"2025-04-20T04:03:00.721+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":35401}
+{"level":"info","timestamp":"2025-04-20T04:55:10.294+0300","caller":"app/app.go:48","msg":"Unable to connect to database:","pid":53074,"error":"failed to connect to `user=postgres database=avito_internship`: hostname resolving error: lookup avito_postgres: no such host"}

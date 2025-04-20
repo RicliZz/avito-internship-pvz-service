@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -17,7 +16,7 @@ type APIServer struct {
 func NewAPIServer(router *gin.Engine) *APIServer {
 	return &APIServer{
 		httpServer: &http.Server{
-			Addr:         os.Getenv("API_ADDR") + os.Getenv("API_PORT"),
+			Addr:         "0.0.0.0" + os.Getenv("API_PORT"),
 			Handler:      router.Handler(),
 			ReadTimeout:  5 * time.Second,
 			WriteTimeout: 10 * time.Second,
@@ -27,7 +26,7 @@ func NewAPIServer(router *gin.Engine) *APIServer {
 
 func (s *APIServer) Start() {
 	if err := s.httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Fatal(err)
+		logger.Logger.Fatal(err)
 	}
 
 }

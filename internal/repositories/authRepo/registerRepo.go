@@ -23,7 +23,7 @@ func (r *AuthRepository) Register(payload models.RegisterParams) (error, *models
 	var newUser models.User
 	err := r.db.QueryRow(context.Background(),
 		`INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING "ID", email, role`,
-		payload.Email, payload.Password, payload.Role).Scan(&newUser.ID, newUser.Email, newUser.Role)
+		payload.Email, payload.Password, payload.Role).Scan(&newUser.ID, &newUser.Email, &newUser.Role)
 
 	if err != nil {
 		logger.Logger.Errorw("Failed register user",
