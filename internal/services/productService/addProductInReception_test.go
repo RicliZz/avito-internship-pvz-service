@@ -3,6 +3,7 @@ package productService
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/gin-gonic/gin"
@@ -88,4 +89,46 @@ func TestAddProductInReception(t *testing.T) {
 
 	mockReceptionRepo.AssertExpectations(t)
 	mockProductRepo.AssertExpectations(t)
+}
+
+func TestAddProductInReception_NotFoundReception(t *testing.T) {
+	logger.Logger = zap.NewNop().Sugar()
+
+	gin.SetMode(gin.TestMode)
+
+	mockReceptionRepo := new(MockReceptionRepository)
+	mockProductRepo := new(MockProductRepository)
+
+	service := ProductService{
+		ProductRepo:         mockProductRepo,
+		ReceptionRepository: mockReceptionRepo,
+	}
+
+	pvzID := uuid.New()
+	product := &models.Product{
+		ProductType: "одежда",
+	}
+
+	requestBody := models.AddProductRequest{
+		Type:  product.ProductType,
+		PvzID: pvzID,
+	}
+
+	bodyBytes, _ := json.Marshal(requestBody)
+	req := httptest.NewRequest(http.MethodPost, "/products", bytes.NewReader(bodyBytes))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+
+	c, _ := gin.CreateTestContext(w)
+	c.Request = req
+
+	// Возвращаем ошибку при поиске приёмки
+	mockReceptionRepo.On("FindLastActiveReception", pvzID).Return(errors.New("not found"), uuid.Nil)
+
+	service.AddProductInReception(c)
+
+	require.Equal(t, 400, w.Code)
+
+	mockReceptionRepo.AssertExpectations(t)
+	mockProductRepo.AssertNotCalled(t, "AddProductInActiveReception", mock.Anything, mock.Anything)
 }

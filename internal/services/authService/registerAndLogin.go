@@ -9,18 +9,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AuthLogin struct {
+type AuthLoginService struct {
 	DummyLoginService
 	authDB repositories.AuthenticationRepo
 }
 
-func NewAuthLogin(authDB repositories.AuthenticationRepo) *AuthLogin {
-	return &AuthLogin{
+func NewAuthLogin(authDB repositories.AuthenticationRepo) *AuthLoginService {
+	return &AuthLoginService{
 		authDB: authDB,
 	}
 }
 
-func (s *AuthLogin) Login(c *gin.Context) {
+func (s *AuthLoginService) Login(c *gin.Context) {
 	logger.Logger.Info("Login service was started")
 
 	user := &models.LoginParams{}
@@ -51,7 +51,7 @@ func (s *AuthLogin) Login(c *gin.Context) {
 	c.JSON(200, token)
 }
 
-func (s *AuthLogin) Register(c *gin.Context) {
+func (s *AuthLoginService) Register(c *gin.Context) {
 	logger.Logger.Info("Register service was started")
 	var user models.RegisterParams
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -61,10 +61,15 @@ func (s *AuthLogin) Register(c *gin.Context) {
 	}
 
 	//Хэшируем пароль и заменяем изначальный на его хэш в модели
-	user.Password = pass.CreateHash(user.Password)
-
+	newPass, err := pass.CreateHash(user.Password)
+	if err != nil {
+		logger.Logger.Error("Failed create hash")
+		c.JSON(400, models.Error{Message: "Invalid request"})
+		return
+	}
+	user.Password = newPass
 	//Создание пользователя
-	err, newUser := s.authDB.Register(user)
+	newUser, err := s.authDB.Register(user)
 	if err != nil {
 		logger.Logger.Error("Error when creating user")
 		c.JSON(400, models.Error{Message: err.Error()})

@@ -6,6 +6,7 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/proto"
 	"github.com/jackc/pgx/v5"
+	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -13,7 +14,12 @@ import (
 )
 
 func RungRPC() {
-
+	logger.InitLogger()
+	defer logger.Logger.Sync()
+	err := godotenv.Load(".env")
+	if err != nil {
+		logger.Logger.Fatal("Error loading .env file")
+	}
 	conn, err := pgx.Connect(context.Background(), os.Getenv("POSTGRESQL_URL"))
 	if err != nil {
 		logger.Logger.Infow("Unable to connect to database:",

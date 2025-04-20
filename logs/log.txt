@@ -147,3 +147,7 @@
 {"level":"info","timestamp":"2025-04-20T07:53:35.584+0300","caller":"pvzRepo/pvzRepo.go:37","msg":"GetListPVZ repository was started","pid":79738}
 {"level":"info","timestamp":"2025-04-20T08:12:57.143+0300","caller":"app/app.go:116","msg":"Shutting down server...","pid":79738}
 {"level":"info","timestamp":"2025-04-20T08:12:57.149+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":79738}
+{"level":"info","timestamp":"2025-04-20T22:33:08.830+0300","caller":"authService/registerAndLogin.go:55","msg":"Register service was started","pid":85024}
+{"level":"info","timestamp":"2025-04-20T22:33:08.876+0300","caller":"authRepo/registerRepo.go:26","msg":"Register repository was start","pid":85024}
+{"level":"info","timestamp":"2025-04-20T22:34:02.489+0300","caller":"app/app.go:116","msg":"Shutting down server...","pid":85024}
+{"level":"info","timestamp":"2025-04-20T22:34:02.496+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":85024}

@@ -8,17 +8,21 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-type AuthRepository struct {
-	db *pgx.Conn
+type Querier interface {
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
 }
 
-func NewAuthRepository(db *pgx.Conn) *AuthRepository {
+type AuthRepository struct {
+	db Querier
+}
+
+func NewAuthRepository(db Querier) *AuthRepository {
 	return &AuthRepository{
 		db: db,
 	}
 }
 
-func (r *AuthRepository) Register(payload models.RegisterParams) (error, *models.User) {
+func (r *AuthRepository) Register(payload models.RegisterParams) (*models.User, error) {
 	logger.Logger.Info("Register repository was start")
 	var newUser models.User
 	err := r.db.QueryRow(context.Background(),
@@ -29,9 +33,9 @@ func (r *AuthRepository) Register(payload models.RegisterParams) (error, *models
 		logger.Logger.Errorw("Failed register user",
 			"email", payload.Email,
 			"role", payload.Role)
-		return err, nil
+		return nil, err
 	}
-	return nil, &newUser
+	return &newUser, err
 }
 
 func (r *AuthRepository) GetUserByEmail(email string) (error, string, string) {

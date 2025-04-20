@@ -14,12 +14,13 @@ var params = &argon2id.Params{
 	KeyLength:   32,
 }
 
-func CreateHash(password string) string {
+func CreateHash(password string) (string, error) {
 	hash, err := argon2id.CreateHash(password, params)
 	if err != nil {
 		log.Println("Error creating hash:", err)
+		return "", err
 	}
-	return hash
+	return hash, nil
 }
 
 func ComparePassWithHash(password, hash string) bool {
