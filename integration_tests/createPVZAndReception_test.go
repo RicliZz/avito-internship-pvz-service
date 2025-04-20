@@ -6,7 +6,6 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/require"
 	"math/rand"
-	"sync"
 	"testing"
 )
 
@@ -36,24 +35,14 @@ func TestIntegrationAddProductInReception(t *testing.T) {
 	err = conn.QueryRow(context.Background(), sqlInsertReception, pvzID).Scan(&receptionID)
 	require.NoError(t, err)
 
-	var wg sync.WaitGroup
 	for i := 0; i < 50; i++ {
-		wg.Add(1)
-		go func(i int) {
-			defer wg.Done()
 
-			conn, err = pgx.Connect(context.Background(), connStr)
-			require.NoError(t, err)
-			defer conn.Close(context.Background())
+		sqlInsertProduct := `INSERT INTO products (type, "receptionID") VALUES ($1, $2) RETURNING "ID";`
+		var productID uuid.UUID
+		err = conn.QueryRow(context.Background(), sqlInsertProduct, productTypes[i], receptionID).Scan(&productID)
+		require.NoError(t, err)
 
-			sqlInsertProduct := `INSERT INTO products (type, "receptionID") VALUES ($1, $2) RETURNING "ID";`
-			var productID uuid.UUID
-			err = conn.QueryRow(context.Background(), sqlInsertProduct, productTypes[i], receptionID).Scan(&productID)
-			require.NoError(t, err)
-		}(i)
 	}
-
-	wg.Wait()
 
 	sqlCountProducts := `SELECT COUNT(*) FROM products WHERE "receptionID" = $1;`
 	var productCount int

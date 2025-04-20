@@ -14,6 +14,7 @@ func (s *ReceptionService) DeleteLastProductInActiveReception(c *gin.Context) {
 	if err != nil {
 		logger.Logger.Debug("Validation failed")
 		c.JSON(400, models.Error{Message: "Invalid request"})
+		return
 	}
 	if err = s.ReceptionRepo.DeleteLastProduct(uuidPVZID); err != nil {
 		logger.Logger.Info("Error deleting last product")
