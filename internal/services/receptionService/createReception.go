@@ -20,7 +20,7 @@ func (s *ReceptionService) CreateReception(c *gin.Context) {
 		c.JSON(400, models.Error{Message: "Invalid request"})
 		return
 	}
-	err, newReception := s.ReceptionRepo.CreateReception(reception)
+	newReception, err := s.ReceptionRepo.CreateReception(reception)
 	if err != nil {
 		logger.Logger.Info("Error creating reception")
 		c.JSON(400, models.Error{Message: "Invalid request"})

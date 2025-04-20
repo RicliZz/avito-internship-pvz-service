@@ -19,7 +19,7 @@ func NewPVZRepository(db *pgx.Conn) *PVZRepository {
 	}
 }
 
-func (r *PVZRepository) CreatePVZ(payload models.CreatePVZRequest) (error, *models.PVZ) {
+func (r *PVZRepository) CreatePVZ(payload models.CreatePVZRequest) (*models.PVZ, error) {
 	logger.Logger.Info("CreatePVZ repository was started")
 	var newPVZ models.PVZ
 	err := r.db.QueryRow(context.Background(), `
@@ -28,12 +28,12 @@ func (r *PVZRepository) CreatePVZ(payload models.CreatePVZRequest) (error, *mode
 		payload.City).Scan(&newPVZ.ID, &newPVZ.RegistrationDate, &newPVZ.City)
 	if err != nil {
 		logger.Logger.Error("Failed create new PVZ")
-		return err, nil
+		return nil, err
 	}
-	return nil, &newPVZ
+	return &newPVZ, nil
 }
 
-func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) (error, []models.ListPVZResponse) {
+func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) ([]models.ListPVZResponse, error) {
 	logger.Logger.Info("GetListPVZ repository was started")
 	offset := (params.Page - 1) * params.Limit
 
@@ -52,7 +52,7 @@ func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) (error
 
 	rows, err := r.db.Query(context.Background(), sqlQuery, params.StartDate, params.EndDate, params.Limit, offset)
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -79,7 +79,7 @@ func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) (error
 			&receptionID, &receptionDate, &status,
 			&productID, &productDate, &productType)
 		if err != nil {
-			return err, nil
+			return nil, err
 		}
 
 		findPVZ, ok := forDeleteDuplicatesPVZ[pvzID]
@@ -125,5 +125,5 @@ func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) (error
 		res = append(res, *v)
 	}
 
-	return nil, res
+	return res, nil
 }

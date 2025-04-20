@@ -38,7 +38,7 @@ func (r *AuthRepository) Register(payload models.RegisterParams) (*models.User, 
 	return &newUser, err
 }
 
-func (r *AuthRepository) GetUserByEmail(email string) (error, string, string) {
+func (r *AuthRepository) GetUserByEmail(email string) (string, string, error) {
 	logger.Logger.Info("GetUserByEmail repository was started")
 	var password string
 	var role string
@@ -48,10 +48,10 @@ func (r *AuthRepository) GetUserByEmail(email string) (error, string, string) {
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			logger.Logger.Debugw("Don't find user with email", "email", email)
-			return fmt.Errorf("пользователь с email %s не найден", email), "", ""
+			return "", "", fmt.Errorf("пользователь с email %s не найден", email)
 		}
-		return err, "", ""
+		return "", "", err
 	}
 
-	return nil, password, role
+	return password, role, nil
 }

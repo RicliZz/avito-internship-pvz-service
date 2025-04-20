@@ -36,12 +36,12 @@ func (s *ProductService) AddProductInReception(c *gin.Context) {
 		return
 	}
 
-	err, receptionID := s.ReceptionRepository.FindLastActiveReception(product.PvzID)
+	receptionID, err := s.ReceptionRepository.FindLastActiveReception(product.PvzID)
 	if err != nil {
 		c.JSON(400, models.Error{Message: "Invalid request or no active reception"})
 		return
 	}
-	err, newProduct := s.ProductRepo.AddProductInActiveReception(receptionID, product.Type)
+	newProduct, err := s.ProductRepo.AddProductInActiveReception(receptionID, product.Type)
 	if err != nil {
 		c.JSON(400, gin.H{"description": err.Error()})
 		return

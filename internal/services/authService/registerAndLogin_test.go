@@ -28,9 +28,9 @@ func (m *MockAuthenticationRepository) Register(payload models.RegisterParams) (
 	return nil, args.Error(1)
 }
 
-func (m *MockAuthenticationRepository) GetUserByEmail(email string) (error, string, string) {
+func (m *MockAuthenticationRepository) GetUserByEmail(email string) (string, string, error) {
 	args := m.Called(email)
-	return args.Error(0), args.String(1), args.String(2)
+	return args.String(0), args.String(1), args.Error(2)
 }
 
 func TestLoginService_Login(t *testing.T) {
@@ -46,7 +46,7 @@ func TestLoginService_Login(t *testing.T) {
 	}
 
 	t.Run("Valid credentials", func(t *testing.T) {
-		mockRepo.On("GetUserByEmail", "user@example.com").Return(nil, paramPass, "moderator")
+		mockRepo.On("GetUserByEmail", "user@example.com").Return(paramPass, "moderator", nil)
 
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
@@ -68,7 +68,7 @@ func TestLoginService_Login(t *testing.T) {
 	})
 
 	t.Run("Invalid password", func(t *testing.T) {
-		mockRepo.On("GetUserByEmail", "user@example.com").Return(nil, paramPass, "moderator")
+		mockRepo.On("GetUserByEmail", "user@example.com").Return(paramPass, "moderator", nil)
 
 		// Создаем запрос
 		w := httptest.NewRecorder()
@@ -92,7 +92,7 @@ func TestLoginService_Login(t *testing.T) {
 	})
 
 	t.Run("User not found", func(t *testing.T) {
-		mockRepo.On("GetUserByEmail", "user@example.com").Return(errors.New("user not found"), "", "")
+		mockRepo.On("GetUserByEmail", "user@example.com").Return("", "", errors.New("user not found"))
 
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)

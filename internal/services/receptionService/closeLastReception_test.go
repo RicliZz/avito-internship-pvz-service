@@ -18,14 +18,14 @@ type MockReceptionRepository struct {
 	mock.Mock
 }
 
-func (m *MockReceptionRepository) FindLastActiveReception(PVZId uuid.UUID) (error, uuid.UUID) {
+func (m *MockReceptionRepository) FindLastActiveReception(PVZId uuid.UUID) (uuid.UUID, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (m *MockReceptionRepository) CloseLastReception(PVZId uuid.UUID) (error, *models.Reception) {
+func (m *MockReceptionRepository) CloseLastReception(PVZId uuid.UUID) (*models.Reception, error) {
 	args := m.Called(PVZId)
-	return args.Error(0), args.Get(1).(*models.Reception)
+	return args.Get(0).(*models.Reception), args.Error(1)
 }
 
 func TestCloseLastReception(t *testing.T) {
@@ -51,7 +51,7 @@ func TestCloseLastReception(t *testing.T) {
 
 	c.Params = gin.Params{gin.Param{Key: "pvzId", Value: pvzID.String()}}
 
-	mockReceptionRepo.On("CloseLastReception", pvzID).Return(nil, closedReception)
+	mockReceptionRepo.On("CloseLastReception", pvzID).Return(closedReception, nil)
 
 	service.CloseLastReception(c)
 

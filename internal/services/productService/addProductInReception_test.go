@@ -24,14 +24,14 @@ type MockReceptionRepository struct {
 	mock.Mock
 }
 
-func (m *MockReceptionRepository) CreateReception(reception models.CreateReceptionRequest) (error, *models.Reception) {
+func (m *MockReceptionRepository) CreateReception(reception models.CreateReceptionRequest) (*models.Reception, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (m *MockReceptionRepository) FindLastActiveReception(PVZId uuid.UUID) (error, uuid.UUID) {
+func (m *MockReceptionRepository) FindLastActiveReception(PVZId uuid.UUID) (uuid.UUID, error) {
 	args := m.Called(PVZId)
-	return args.Error(0), args.Get(1).(uuid.UUID)
+	return args.Get(0).(uuid.UUID), args.Error(1)
 }
 
 func (m *MockReceptionRepository) DeleteLastProduct(PVZId uuid.UUID) error {
@@ -39,14 +39,14 @@ func (m *MockReceptionRepository) DeleteLastProduct(PVZId uuid.UUID) error {
 	panic("implement me")
 }
 
-func (m *MockReceptionRepository) CloseLastReception(PVZId uuid.UUID) (error, *models.Reception) {
+func (m *MockReceptionRepository) CloseLastReception(PVZId uuid.UUID) (*models.Reception, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (m *MockProductRepository) AddProductInActiveReception(receptionID uuid.UUID, productType string) (error, *models.Product) {
+func (m *MockProductRepository) AddProductInActiveReception(receptionID uuid.UUID, productType string) (*models.Product, error) {
 	args := m.Called(receptionID, productType)
-	return nil, args.Get(1).(*models.Product)
+	return args.Get(0).(*models.Product), args.Error(1)
 }
 
 func TestAddProductInReception(t *testing.T) {
@@ -77,8 +77,8 @@ func TestAddProductInReception(t *testing.T) {
 	c, _ := gin.CreateTestContext(w)
 	c.Request = req
 
-	mockReceptionRepo.On("FindLastActiveReception", pvzID).Return(nil, receptionID)
-	mockProductRepo.On("AddProductInActiveReception", receptionID, product.ProductType).Return(nil, product)
+	mockReceptionRepo.On("FindLastActiveReception", pvzID).Return(receptionID, nil)
+	mockProductRepo.On("AddProductInActiveReception", receptionID, product.ProductType).Return(product, nil)
 	service.AddProductInReception(c)
 	require.Equal(t, http.StatusCreated, w.Code)
 	var response models.Product
@@ -123,7 +123,7 @@ func TestAddProductInReception_NotFoundReception(t *testing.T) {
 	c.Request = req
 
 	// Возвращаем ошибку при поиске приёмки
-	mockReceptionRepo.On("FindLastActiveReception", pvzID).Return(errors.New("not found"), uuid.Nil)
+	mockReceptionRepo.On("FindLastActiveReception", pvzID).Return(uuid.Nil, errors.New("not found"))
 
 	service.AddProductInReception(c)
 

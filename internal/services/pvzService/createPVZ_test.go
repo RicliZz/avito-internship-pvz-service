@@ -19,12 +19,12 @@ type MockPVZRepository struct {
 	mock.Mock
 }
 
-func (m *MockPVZRepository) CreatePVZ(pvz models.CreatePVZRequest) (error, *models.PVZ) {
+func (m *MockPVZRepository) CreatePVZ(pvz models.CreatePVZRequest) (*models.PVZ, error) {
 	args := m.Called(pvz)
-	return args.Error(0), args.Get(1).(*models.PVZ)
+	return args.Get(0).(*models.PVZ), args.Error(1)
 }
 
-func (m *MockPVZRepository) GetListPVZ(filters models.QueryParamForGetPVZList) (error, []models.ListPVZResponse) {
+func (m *MockPVZRepository) GetListPVZ(filters models.QueryParamForGetPVZList) ([]models.ListPVZResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
@@ -47,7 +47,7 @@ func TestCreatePVZ(t *testing.T) {
 	c, _ := gin.CreateTestContext(w)
 	c.Request = req
 
-	mockRepo.On("CreatePVZ", reqBody).Return(nil, expectedPVZ)
+	mockRepo.On("CreatePVZ", reqBody).Return(expectedPVZ, nil)
 
 	service.CreatePVZ(c)
 

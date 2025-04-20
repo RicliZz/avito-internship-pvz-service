@@ -7,21 +7,21 @@ import (
 
 type AuthenticationRepo interface {
 	Register(payload models.RegisterParams) (*models.User, error)
-	GetUserByEmail(email string) (error, string, string)
+	GetUserByEmail(email string) (string, string, error)
 }
 
 type PVZRepo interface {
-	CreatePVZ(pvz models.CreatePVZRequest) (error, *models.PVZ)
-	GetListPVZ(filters models.QueryParamForGetPVZList) (error, []models.ListPVZResponse)
+	CreatePVZ(pvz models.CreatePVZRequest) (*models.PVZ, error)
+	GetListPVZ(filters models.QueryParamForGetPVZList) ([]models.ListPVZResponse, error)
 }
 
 type ReceptionRepo interface {
-	CreateReception(reception models.CreateReceptionRequest) (error, *models.Reception)
-	FindLastActiveReception(PVZId uuid.UUID) (error, uuid.UUID)
+	CreateReception(reception models.CreateReceptionRequest) (*models.Reception, error)
+	FindLastActiveReception(PVZId uuid.UUID) (uuid.UUID, error)
 	DeleteLastProduct(PVZId uuid.UUID) error
-	CloseLastReception(PVZId uuid.UUID) (error, *models.Reception)
+	CloseLastReception(PVZId uuid.UUID) (*models.Reception, error)
 }
 
 type ProductRepo interface {
-	AddProductInActiveReception(receptionID uuid.UUID, productType string) (error, *models.Product)
+	AddProductInActiveReception(receptionID uuid.UUID, productType string) (*models.Product, error)
 }

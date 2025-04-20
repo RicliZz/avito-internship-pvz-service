@@ -18,7 +18,7 @@ func NewProductRepository(db *pgx.Conn) *ProductRepository {
 	}
 }
 
-func (r *ProductRepository) AddProductInActiveReception(receptionID uuid.UUID, productType string) (error, *models.Product) {
+func (r *ProductRepository) AddProductInActiveReception(receptionID uuid.UUID, productType string) (*models.Product, error) {
 	logger.Logger.Info("AddProductInActiveReception repository was started")
 	var newProduct models.Product
 	sqlQuery := `INSERT INTO products (type, "receptionID") VALUES ($1, $2) RETURNING "ID", "dateTime", type, "receptionID"`
@@ -26,7 +26,7 @@ func (r *ProductRepository) AddProductInActiveReception(receptionID uuid.UUID, p
 		productType, receptionID).Scan(&newProduct.ID, &newProduct.DateTime, &newProduct.ProductType, &newProduct.ReceptionId)
 	if err != nil {
 		logger.Logger.Error("AddProductInActiveReception repository failed to insert product", err)
-		return err, nil
+		return nil, err
 	}
-	return nil, &newProduct
+	return &newProduct, nil
 }

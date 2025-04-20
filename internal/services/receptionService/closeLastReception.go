@@ -17,7 +17,7 @@ func (s *ReceptionService) CloseLastReception(c *gin.Context) {
 		c.JSON(400, models.Error{Message: "Invalid request"})
 		return
 	}
-	err, closedReception := s.ReceptionRepo.CloseLastReception(uuidPVZID)
+	closedReception, err := s.ReceptionRepo.CloseLastReception(uuidPVZID)
 	if err != nil {
 		log.Println("Failed to close reception")
 		c.JSON(400, models.Error{Message: "Invalid request"})

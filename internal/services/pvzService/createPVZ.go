@@ -21,7 +21,7 @@ func (s *PVZService) CreatePVZ(c *gin.Context) {
 		c.JSON(400, models.Error{Message: "Invalid request"})
 		return
 	}
-	err, newPVZ := s.PVZRepo.CreatePVZ(PVZ)
+	newPVZ, err := s.PVZRepo.CreatePVZ(PVZ)
 	if err != nil {
 		logger.Logger.Error("Error when creating PVZ")
 		c.JSON(400, models.Error{Message: err.Error()})

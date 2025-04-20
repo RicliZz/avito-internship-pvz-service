@@ -20,7 +20,7 @@ func (s *PVZService) GetPVZList(c *gin.Context) {
 		return
 	}
 	var allPVZ []models.ListPVZResponse
-	err, allPVZ := s.PVZRepo.GetListPVZ(queryParams)
+	allPVZ, err := s.PVZRepo.GetListPVZ(queryParams)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return

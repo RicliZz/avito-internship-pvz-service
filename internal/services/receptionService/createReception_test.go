@@ -14,9 +14,9 @@ import (
 	"testing"
 )
 
-func (m *MockReceptionRepository) CreateReception(reception models.CreateReceptionRequest) (error, *models.Reception) {
+func (m *MockReceptionRepository) CreateReception(reception models.CreateReceptionRequest) (*models.Reception, error) {
 	args := m.Called(reception)
-	return args.Error(0), args.Get(1).(*models.Reception)
+	return args.Get(0).(*models.Reception), args.Error(1)
 }
 
 func TestCreateReception(t *testing.T) {
@@ -40,7 +40,7 @@ func TestCreateReception(t *testing.T) {
 	c, _ := gin.CreateTestContext(w)
 	c.Request = req
 
-	mockReceptionRepo.On("CreateReception", receptionRequest).Return(nil, newReception)
+	mockReceptionRepo.On("CreateReception", receptionRequest).Return(newReception, nil)
 
 	service.CreateReception(c)
 
