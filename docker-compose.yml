@@ -5,7 +5,7 @@ networks:
 services:
   mainApp:
     build:
-#      context: build
+      context: .
       dockerfile: ./build/mainApp/Dockerfile
     image: main_app_image
     deploy:
@@ -32,6 +32,7 @@ services:
 
   pvz_v1:
     build:
+      context: .
       dockerfile: ./build/pvz_v1/Dockerfile
     image: pvz_v1
     container_name: pvz_v1
