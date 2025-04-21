@@ -33,7 +33,7 @@ func (m *MockAuthenticationRepository) GetUserByEmail(email string) (string, str
 	return args.String(0), args.String(1), args.Error(2)
 }
 
-func TestLoginService_Login(t *testing.T) {
+func TestLoginService(t *testing.T) {
 	logger.Logger = zap.NewNop().Sugar()
 	gin.SetMode(gin.TestMode)
 
@@ -53,7 +53,7 @@ func TestLoginService_Login(t *testing.T) {
 
 		loginParams := models.LoginParams{
 			Email:    "user@example.com",
-			Password: "password123", // Правильный пароль
+			Password: "password123",
 		}
 		loginParamsJSON, err := json.Marshal(loginParams)
 		if err != nil {
@@ -70,7 +70,6 @@ func TestLoginService_Login(t *testing.T) {
 	t.Run("Invalid password", func(t *testing.T) {
 		mockRepo.On("GetUserByEmail", "user@example.com").Return(paramPass, "moderator", nil)
 
-		// Создаем запрос
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 

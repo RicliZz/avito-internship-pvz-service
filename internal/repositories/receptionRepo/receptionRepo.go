@@ -7,15 +7,23 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5/pgconn"
 	"log"
 )
 
-type ReceptionRepository struct {
-	db *pgxpool.Pool
+// Для тестов, работает и без него, если поле db структуры репозитория - *pgxpool.Pool
+type Querier interface {
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
+	Begin(ctx context.Context) (pgx.Tx, error)
+	Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error)
 }
 
-func NewReceptionRepository(db *pgxpool.Pool) *ReceptionRepository {
+type ReceptionRepository struct {
+	db Querier
+}
+
+func NewReceptionRepository(db Querier) *ReceptionRepository {
 	return &ReceptionRepository{
 		db: db,
 	}

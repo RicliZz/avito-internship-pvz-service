@@ -6,15 +6,19 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"time"
 )
 
-type AuthRepository struct {
-	db *pgxpool.Pool
+// Для тестов, работает и без него, если поле db структуры репозитория - *pgxpool.Pool
+type Querier interface {
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
 }
 
-func NewAuthRepository(db *pgxpool.Pool) *AuthRepository {
+type AuthRepository struct {
+	db Querier
+}
+
+func NewAuthRepository(db Querier) *AuthRepository {
 	return &AuthRepository{
 		db: db,
 	}

@@ -88,6 +88,5 @@ func TestCloseLastReception_Fail(t *testing.T) {
 	require.Equal(t, http.StatusBadRequest, w.Code)
 	require.Contains(t, w.Body.String(), "Invalid request")
 
-	// Убедимся, что mock не вызывался, потому что UUID невалиден
 	mockReceptionRepo.AssertNotCalled(t, "CloseLastReception")
 }

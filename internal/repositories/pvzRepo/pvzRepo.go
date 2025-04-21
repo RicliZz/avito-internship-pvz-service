@@ -5,15 +5,21 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5"
 	"time"
 )
 
-type PVZRepository struct {
-	db *pgxpool.Pool
+// Для тестов, работает и без него, если поле db структуры репозитория - *pgxpool.Pool
+type Querier interface {
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
 }
 
-func NewPVZRepository(db *pgxpool.Pool) *PVZRepository {
+type PVZRepository struct {
+	db Querier
+}
+
+func NewPVZRepository(db Querier) *PVZRepository {
 	return &PVZRepository{
 		db: db,
 	}

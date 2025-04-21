@@ -91,7 +91,7 @@ func TestAddProductInReception(t *testing.T) {
 	mockProductRepo.AssertExpectations(t)
 }
 
-func TestAddProductInReception_NotFoundReception(t *testing.T) {
+func TestAddProductInReception_Fail(t *testing.T) {
 	logger.Logger = zap.NewNop().Sugar()
 
 	gin.SetMode(gin.TestMode)
@@ -122,7 +122,6 @@ func TestAddProductInReception_NotFoundReception(t *testing.T) {
 	c, _ := gin.CreateTestContext(w)
 	c.Request = req
 
-	// Возвращаем ошибку при поиске приёмки
 	mockReceptionRepo.On("FindLastActiveReception", pvzID).Return(uuid.Nil, errors.New("not found"))
 
 	service.AddProductInReception(c)

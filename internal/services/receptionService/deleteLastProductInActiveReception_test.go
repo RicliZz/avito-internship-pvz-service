@@ -27,20 +27,16 @@ func TestDeleteLastProductInActiveReception(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/pvz/"+pvzID.String()+"/delete_last_product", nil)
 	w := httptest.NewRecorder()
 
-	// Создаем тестовый контекст
 	c, _ := gin.CreateTestContext(w)
 	c.Request = req
 	c.Params = gin.Params{gin.Param{Key: "pvzId", Value: pvzID.String()}}
-	// Вызов метода сервиса
+
 	service.DeleteLastProductInActiveReception(c)
 
-	// Проверка статус кода
 	require.Equal(t, http.StatusOK, w.Code)
 
-	// Проверка тела ответа
 	require.Equal(t, `"Товар удалён"`, w.Body.String())
 
-	// Проверка вызова метода мок репозитория
 	mockReceptionRepo.AssertExpectations(t)
 }
 
