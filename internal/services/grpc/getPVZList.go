@@ -8,12 +8,12 @@ import (
 	"time"
 )
 
-type GRPCserver struct {
+type ServergRPC struct {
 	pvz_v1.UnimplementedPVZServiceServer
 	Db *pgx.Conn
 }
 
-func (s *GRPCserver) GetPVZList(ctx context.Context, in *pvz_v1.GetPVZListRequest) (*pvz_v1.GetPVZListResponse, error) {
+func (s *ServergRPC) GetPVZList(ctx context.Context, in *pvz_v1.GetPVZListRequest) (*pvz_v1.GetPVZListResponse, error) {
 	sqlQuery := `SELECT "ID", "registrationDate", city FROM "PVZ"`
 	rows, err := s.Db.Query(ctx, sqlQuery)
 	if err != nil {

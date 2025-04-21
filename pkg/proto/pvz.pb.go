@@ -226,7 +226,7 @@ const file_pkg_proto_pvz_proto_rawDesc = "" +
 	"\n" +
 	"PVZService\x12C\n" +
 	"\n" +
-	"GetPVZList\x12\x19.pvz.v1.GetPVZListRequest\x1a\x1a.pvz.v1.GetPVZListResponseBCZAgithub.com/RicliZz/avito-internship-pvz-service/pvz/pvz_v1;pvz_v1b\x06proto3"
+	"GetPVZList\x12\x19.pvz.v1.GetPVZListRequest\x1a\x1a.pvz.v1.GetPVZListResponseBBZ@github.com/RicliZz/avito-internship-pvz-service/pkg/proto;pvz_v1b\x06proto3"
 
 var (
 	file_pkg_proto_pvz_proto_rawDescOnce sync.Once

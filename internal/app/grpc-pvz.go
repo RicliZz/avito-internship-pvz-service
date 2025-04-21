@@ -4,7 +4,7 @@ import (
 	"context"
 	grpcServices "github.com/RicliZz/avito-internship-pvz-service/internal/services/grpc"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
-	"github.com/RicliZz/avito-internship-pvz-service/pkg/proto"
+	pvz_v1 "github.com/RicliZz/avito-internship-pvz-service/pkg/proto"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
@@ -33,7 +33,7 @@ func RungRPC() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pvz_v1.RegisterPVZServiceServer(s, &grpcServices.GRPCserver{Db: conn})
+	pvz_v1.RegisterPVZServiceServer(s, &grpcServices.ServergRPC{Db: conn})
 	log.Printf("server listening at %v", lis.Addr())
 	if err = s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

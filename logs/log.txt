@@ -151,3 +151,24 @@
 {"level":"info","timestamp":"2025-04-20T22:33:08.876+0300","caller":"authRepo/registerRepo.go:26","msg":"Register repository was start","pid":85024}
 {"level":"info","timestamp":"2025-04-20T22:34:02.489+0300","caller":"app/app.go:116","msg":"Shutting down server...","pid":85024}
 {"level":"info","timestamp":"2025-04-20T22:34:02.496+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":85024}
+{"level":"info","timestamp":"2025-04-21T18:21:53.461+0300","caller":"app/app.go:130","msg":"Shutting down server...","pid":33245}
+{"level":"info","timestamp":"2025-04-21T18:21:53.464+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":33245}
+{"level":"info","timestamp":"2025-04-21T18:22:01.502+0300","caller":"pvzService/getPVZFromgRPCServer.go:16","msg":"Failed gRPC request","pid":33651}
+{"level":"info","timestamp":"2025-04-21T18:24:54.273+0300","caller":"app/app.go:130","msg":"Shutting down server...","pid":33651}
+{"level":"info","timestamp":"2025-04-21T18:24:54.276+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":33651}
+{"level":"info","timestamp":"2025-04-21T18:27:17.757+0300","caller":"app/app.go:133","msg":"Shutting down server...","pid":34125}
+{"level":"info","timestamp":"2025-04-21T18:27:17.763+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":34125}
+{"level":"info","timestamp":"2025-04-21T18:27:37.136+0300","caller":"app/app.go:133","msg":"Shutting down server...","pid":34455}
+{"level":"info","timestamp":"2025-04-21T18:27:37.139+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":34455}
+{"level":"info","timestamp":"2025-04-21T18:28:31.271+0300","caller":"app/app.go:133","msg":"Shutting down server...","pid":34664}
+{"level":"info","timestamp":"2025-04-21T18:28:31.274+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":34664}
+{"level":"info","timestamp":"2025-04-21T18:30:31.219+0300","caller":"app/app.go:133","msg":"Shutting down server...","pid":35210}
+{"level":"info","timestamp":"2025-04-21T18:30:31.226+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":35210}
+{"level":"info","timestamp":"2025-04-21T18:30:43.995+0300","caller":"app/app.go:133","msg":"Shutting down server...","pid":35605}
+{"level":"info","timestamp":"2025-04-21T18:30:43.997+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":35605}
+{"level":"info","timestamp":"2025-04-21T18:39:03.350+0300","caller":"app/app.go:130","msg":"Shutting down server...","pid":37494}
+{"level":"info","timestamp":"2025-04-21T18:39:03.353+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":37494}
+{"level":"info","timestamp":"2025-04-21T18:39:35.181+0300","caller":"pvzService/getPVZFromgRPCServer.go:16","msg":"Failed gRPC request","pid":37638}
+{"level":"info","timestamp":"2025-04-21T18:40:28.640+0300","caller":"app/app.go:130","msg":"Shutting down server...","pid":37638}
+{"level":"info","timestamp":"2025-04-21T18:40:28.640+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":37638}
+{"level":"info","timestamp":"2025-04-21T18:40:31.765+0300","caller":"pvzService/getPVZFromgRPCServer.go:17","msg":"Failed gRPC request","pid":38085}
