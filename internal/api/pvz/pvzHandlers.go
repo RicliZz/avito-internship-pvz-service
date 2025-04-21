@@ -21,8 +21,7 @@ func NewPVZHandler(pvzService services.PVZService, receptionService services.Rec
 
 func (h *PVZHandler) InitPVZHandlers(router *gin.RouterGroup) {
 	pvzModeratorRouter := router.Group("/pvz")
-	//ВЕРНУТЬ!!!!!!!!!!!!!!!
-	//pvzModeratorRouter.Use(middleware.CheckRoleMiddleware(os.Getenv("JWT_SECRET"), "moderator"))
+	pvzModeratorRouter.Use(middleware.CheckRoleMiddleware(os.Getenv("JWT_SECRET"), "moderator"))
 
 	{
 		pvzModeratorRouter.POST("", h.pvzService.CreatePVZ)

@@ -10,7 +10,7 @@ type User struct {
 
 type RegisterParams struct {
 	Email    string ` json:"email" binding:"required,email"`
-	Password string ` json:"password" binding:"required"`
+	Password string ` json:"password" binding:"required,min=8"`
 	Role     string ` json:"role" binding:"required,oneof=employee moderator"`
 }
 

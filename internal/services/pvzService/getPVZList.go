@@ -4,19 +4,21 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"time"
 )
 
 func (s *PVZService) GetPVZList(c *gin.Context) {
 	queryParams := models.QueryParamForGetPVZList{
-		Page:  1,
-		Limit: 10,
+		Page:      1,
+		Limit:     10,
+		StartDate: time.Now().AddDate(0, 0, -30),
+		EndDate:   time.Now(),
 	}
 	if err := c.ShouldBindQuery(&queryParams); err != nil {
 		logger.Logger.Debugw("Validation failed",
 			"startDate", queryParams.StartDate,
 			"endDate", queryParams.EndDate)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 	var allPVZ []models.ListPVZResponse
@@ -25,5 +27,5 @@ func (s *PVZService) GetPVZList(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(200, gin.H{"data": allPVZ})
+	c.JSON(200, allPVZ)
 }

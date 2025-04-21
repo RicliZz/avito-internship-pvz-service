@@ -22,8 +22,8 @@ type ListPVZResponse struct {
 }
 
 type QueryParamForGetPVZList struct {
-	StartDate time.Time `form:"startDate" time_format:"2006-01-02T15:04:05"`
-	EndDate   time.Time `form:"endDate" time_format:"2006-01-02T15:04:05"`
+	StartDate time.Time `form:"startDate" time_format:"2006-01-02T15:04:05Z"`
+	EndDate   time.Time `form:"endDate" time_format:"2006-01-02T15:04:05Z"`
 	Page      int       `form:"page" binding:"min=1"`
 	Limit     int       `form:"limit" binding:"min=1,max=30"`
 }

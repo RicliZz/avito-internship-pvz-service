@@ -28,7 +28,7 @@ func RungRPC() {
 	}
 	defer conn.Close(context.Background())
 
-	lis, err := net.Listen("tcp", os.Getenv("PVZ_GRPC_ADDR")+os.Getenv("PVZ_GRPC_PORT"))
+	lis, err := net.Listen("tcp", ":3000")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

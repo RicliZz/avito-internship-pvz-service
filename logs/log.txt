@@ -172,3 +172,36 @@
 {"level":"info","timestamp":"2025-04-21T18:40:28.640+0300","caller":"app/app.go:130","msg":"Shutting down server...","pid":37638}
 {"level":"info","timestamp":"2025-04-21T18:40:28.640+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":37638}
 {"level":"info","timestamp":"2025-04-21T18:40:31.765+0300","caller":"pvzService/getPVZFromgRPCServer.go:17","msg":"Failed gRPC request","pid":38085}
+{"level":"info","timestamp":"2025-04-21T18:47:11.737+0300","caller":"app/app.go:130","msg":"Shutting down server...","pid":38085}
+{"level":"info","timestamp":"2025-04-21T18:47:11.743+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":38085}
+{"level":"fatal","timestamp":"2025-04-21T19:16:51.076+0300","caller":"server/server.go:29","msg":"listen tcp 0.0.0.0:8080: bind: address already in use","pid":80197}
+{"level":"info","timestamp":"2025-04-21T19:17:25.715+0300","caller":"authService/registerAndLogin.go:24","msg":"Login service was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:17:25.715+0300","caller":"authRepo/registerRepo.go:44","msg":"GetUserByEmail repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:17:44.773+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:18:42.544+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:18:56.883+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:18:59.076+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:01.192+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:08.533+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:11.918+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:14.201+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:16.443+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:17.995+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:22.636+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:24.644+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:25.679+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:26.480+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:19:27.231+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:20:01.181+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:20:01.978+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:22:16.287+0300","caller":"app/app.go:130","msg":"Shutting down server...","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:22:16.291+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":80537}
+{"level":"info","timestamp":"2025-04-21T19:22:20.482+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":80919}
+{"level":"info","timestamp":"2025-04-21T19:22:46.265+0300","caller":"app/app.go:130","msg":"Shutting down server...","pid":80919}
+{"level":"info","timestamp":"2025-04-21T19:22:46.265+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":80919}
+{"level":"info","timestamp":"2025-04-21T19:22:49.991+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":81111}
+{"level":"info","timestamp":"2025-04-21T19:22:51.950+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":81111}
+{"level":"info","timestamp":"2025-04-21T19:27:34.233+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":82067}
+{"level":"info","timestamp":"2025-04-21T19:29:05.486+0300","caller":"pvzRepo/pvzRepo.go:44","msg":"GetListPVZ repository was started","pid":82067}
+{"level":"info","timestamp":"2025-04-21T19:29:56.305+0300","caller":"app/app.go:130","msg":"Shutting down server...","pid":82067}
+{"level":"info","timestamp":"2025-04-21T19:29:56.305+0300","caller":"server/server.go:43","msg":"Shutdown completed before timeout.","pid":82067}

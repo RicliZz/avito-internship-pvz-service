@@ -2,6 +2,7 @@ package pvzRepo
 
 import (
 	"context"
+	"fmt"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/google/uuid"
@@ -49,7 +50,7 @@ func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) ([]mod
 		       p."ID", p."dateTime", p.type
 		FROM "PVZ" pvz
 		JOIN reception r ON pvz."ID" = r."pvzID"
-		JOIN products p ON p."receptionID" = r."ID"
+		LEFT JOIN products p ON p."receptionID" = r."ID"
 		WHERE r."dateTime" BETWEEN $1 AND $2
 		ORDER BY r."dateTime" DESC 
 		LIMIT $3
@@ -61,7 +62,7 @@ func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) ([]mod
 		return nil, err
 	}
 	defer rows.Close()
-
+	fmt.Println(rows)
 	forDeleteDuplicatesPVZ := make(map[uuid.UUID]*models.ListPVZResponse)
 	forDeleteDuplicatesReception := make(map[uuid.UUID]*models.ListReceptionResponse)
 	receptionAlreadyAdded := make(map[uuid.UUID]bool)
@@ -76,9 +77,9 @@ func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) ([]mod
 			receptionID      uuid.UUID
 			receptionDate    time.Time
 			status           string
-			productID        uuid.UUID
-			productDate      time.Time
-			productType      string
+			productID        *uuid.UUID
+			productDate      *time.Time
+			productType      *string
 		)
 
 		err = rows.Scan(&pvzID, &registrationDate, &city,
@@ -114,13 +115,13 @@ func (r *PVZRepository) GetListPVZ(params models.QueryParamForGetPVZList) ([]mod
 			}
 			forDeleteDuplicatesReception[receptionID] = findReception
 		}
-
-		findReception.Products = append(findReception.Products, models.Product{
-			ID:          productID,
-			ProductType: productType,
-			DateTime:    productDate,
-		})
-
+		if productType != nil {
+			findReception.Products = append(findReception.Products, models.Product{
+				ID:          *productID,
+				ProductType: *productType,
+				DateTime:    *productDate,
+			})
+		}
 		if !receptionAlreadyAdded[receptionID] {
 			findPVZ.Receptions = append(findPVZ.Receptions, findReception)
 			receptionAlreadyAdded[receptionID] = true

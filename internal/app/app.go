@@ -67,7 +67,7 @@ func RunApp() {
 	fmt.Println("Successfully connected to the database")
 
 	//Подключение к удалённому серверу
-	conngRPC, err := grpc.NewClient(os.Getenv("PVZ_GRPC_ADDR")+os.Getenv("PVZ_GRPC_PORT"), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conngRPC, err := grpc.NewClient("pvz_v1:3000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Logger.Error("did not connect: %v", err)
 	}
