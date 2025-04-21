@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"fmt"
 	authentication "github.com/RicliZz/avito-internship-pvz-service/internal/api/auth"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/api/products"
 	"github.com/RicliZz/avito-internship-pvz-service/internal/api/pvz"
@@ -22,12 +23,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -44,13 +46,25 @@ func RunApp() {
 	}
 
 	//Подключение к Постгресу
-	conn, err := pgx.Connect(context.Background(), os.Getenv("POSTGRESQL_URL"))
+	config, err := pgxpool.ParseConfig(os.Getenv("POSTGRESQL_URL"))
 	if err != nil {
-		logger.Logger.Infow("Unable to connect to database:",
-			"error", err)
-		os.Exit(1)
+		log.Fatalf("Unable to parse database URL: %v\n", err)
 	}
-	defer conn.Close(context.Background())
+
+	config.MaxConns = 100
+
+	conn, err := pgxpool.NewWithConfig(context.Background(), config)
+	if err != nil {
+		log.Fatalf("Unable to connect to database: %v\n", err)
+	}
+	defer conn.Close()
+
+	// Проверка соединения
+	err = conn.Ping(context.Background())
+	if err != nil {
+		log.Fatalf("Ping failed: %v\n", err)
+	}
+	fmt.Println("Successfully connected to the database")
 
 	//Подключение к удалённому серверу
 	conngRPC, err := grpc.NewClient(os.Getenv("PVZ_GRPC_ADDR")+os.Getenv("PVZ_GRPC_PORT"), grpc.WithTransportCredentials(insecure.NewCredentials()))

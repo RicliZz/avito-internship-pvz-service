@@ -7,14 +7,15 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 )
 
 type ReceptionRepository struct {
-	db *pgx.Conn
+	db *pgxpool.Pool
 }
 
-func NewReceptionRepository(db *pgx.Conn) *ReceptionRepository {
+func NewReceptionRepository(db *pgxpool.Pool) *ReceptionRepository {
 	return &ReceptionRepository{
 		db: db,
 	}

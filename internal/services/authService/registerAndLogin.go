@@ -31,7 +31,6 @@ func (s *AuthLoginService) Login(c *gin.Context) {
 		c.JSON(401, models.Error{Message: "Invalid credentials"})
 		return
 	}
-
 	password, role, err := s.authDB.GetUserByEmail(user.Email)
 	if err != nil {
 		c.JSON(401, models.Error{Message: "Invalid credentials"})

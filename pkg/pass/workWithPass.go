@@ -7,9 +7,9 @@ import (
 )
 
 var params = &argon2id.Params{
-	Memory:      64 * 1024,
+	Memory:      16 * 1024,
 	Iterations:  1,
-	Parallelism: uint8(runtime.NumCPU()),
+	Parallelism: uint8(runtime.NumCPU()) / 2,
 	SaltLength:  16,
 	KeyLength:   32,
 }

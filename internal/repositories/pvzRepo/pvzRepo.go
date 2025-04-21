@@ -5,15 +5,15 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"time"
 )
 
 type PVZRepository struct {
-	db *pgx.Conn
+	db *pgxpool.Pool
 }
 
-func NewPVZRepository(db *pgx.Conn) *PVZRepository {
+func NewPVZRepository(db *pgxpool.Pool) *PVZRepository {
 	return &PVZRepository{
 		db: db,
 	}

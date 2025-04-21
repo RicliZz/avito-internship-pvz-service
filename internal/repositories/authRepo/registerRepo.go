@@ -6,17 +6,15 @@ import (
 	"github.com/RicliZz/avito-internship-pvz-service/internal/models"
 	"github.com/RicliZz/avito-internship-pvz-service/pkg/logger"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"time"
 )
 
-type Querier interface {
-	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
-}
-
 type AuthRepository struct {
-	db Querier
+	db *pgxpool.Pool
 }
 
-func NewAuthRepository(db Querier) *AuthRepository {
+func NewAuthRepository(db *pgxpool.Pool) *AuthRepository {
 	return &AuthRepository{
 		db: db,
 	}
@@ -42,8 +40,9 @@ func (r *AuthRepository) GetUserByEmail(email string) (string, string, error) {
 	logger.Logger.Info("GetUserByEmail repository was started")
 	var password string
 	var role string
-
-	err := r.db.QueryRow(context.Background(), `SELECT password, role FROM users WHERE email = $1`,
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	err := r.db.QueryRow(ctx, `SELECT password, role FROM users WHERE email = $1`,
 		email).Scan(&password, &role)
 	if err != nil {
 		if err == pgx.ErrNoRows {
