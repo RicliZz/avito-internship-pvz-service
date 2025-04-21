@@ -17,6 +17,8 @@ docker-compose up --build
 | PostgreSQL         | postgres_service    | 5432                   | localhost:5433          |  
 | Prometheus         | prometheus_service  | 9090                   | localhost:9000          |  
 
+Точка входа - ./cmd/mainApp/main.go
+
 ## gRPC
 Решил взаимодействовать с gRPC сервером через ручку "pvz/grpc".
 
