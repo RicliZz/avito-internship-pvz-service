@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS "idx_reception_datetime_DESC";
